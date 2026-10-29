@@ -60,7 +60,7 @@
         sending = false;
         if (button) button.disabled = false;
         if (window.srlTrack) window.srlTrack('quote_submit_failed', { form: 'truckload', reason: reason });
-        if (status) status.textContent = 'That did not go through. Opening your email app instead - or email SRLteam@armstrongtransport.com or call 614-855-9504.';
+        if (status) status.textContent = 'That did not go through. Opening your email app instead, or email SRLteam@armstrongtransport.com or call 380-235-7422.';
         window.location.href = 'mailto:SRLteam@armstrongtransport.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(text);
       };
       if (!FORM_ENDPOINT) return fallback('no_endpoint');

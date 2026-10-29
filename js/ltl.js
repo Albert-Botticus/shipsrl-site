@@ -185,7 +185,7 @@
       sending = false;
       if (button) button.disabled = false;
       if (window.srlTrack) window.srlTrack('quote_submit_failed', { form: 'ltl', reason: reason });
-      status.textContent = 'That did not go through. Opening your email app instead - or email ' + TO_ADDRESS + ' or call 614-855-9504.';
+      status.textContent = 'That did not go through. Opening your email app instead, or email ' + TO_ADDRESS + ' or call 380-235-7422.';
       window.location.href = 'mailto:' + TO_ADDRESS + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(text);
     };
 
@@ -211,6 +211,6 @@
       return;
     }
     window.location.href = 'mailto:' + TO_ADDRESS + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(text);
-    status.textContent = 'Your email app should open with the request filled in. If it does not, email ' + TO_ADDRESS + ' or call 614-855-9504.';
+    status.textContent = 'Your email app should open with the request filled in. If it does not, email ' + TO_ADDRESS + ' or call 380-235-7422.';
   });
 })();
