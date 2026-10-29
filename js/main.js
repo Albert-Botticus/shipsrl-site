@@ -43,6 +43,7 @@
         'Company: ' + get('company'),
         'Email: ' + get('email'),
         'Phone: ' + get('phone'),
+        'SMS consent: ' + (form.elements['sms_consent'] && form.elements['sms_consent'].checked ? 'YES (consented to SMS on shipsrl.com)' : 'no'),
         'Origin: ' + get('origin'),
         'Destination: ' + get('destination'),
         'Equipment: ' + get('equipment'),

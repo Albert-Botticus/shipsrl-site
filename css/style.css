@@ -225,3 +225,9 @@ form .note { font-size: 0.85rem; color: var(--muted); margin-top: 10px; }
   .nav .btn { margin-top: 12px; text-align: center; border-bottom: 0; }
   .brand span { display: none; }
 }
+
+/* SMS consent (TCR): optional, unchecked by default, next to the phone field */
+.sms-consent { margin-top: 12px; }
+.sms-consent-label { display: flex; align-items: flex-start; gap: 10px; font-weight: 400; font-size: 0.86rem; line-height: 1.5; color: #4a5667; margin: 0; }
+.sms-consent-label input { width: auto; margin: 3px 0 0; flex: 0 0 auto; }
+.sms-consent-label a { color: var(--navy); text-decoration: underline; }

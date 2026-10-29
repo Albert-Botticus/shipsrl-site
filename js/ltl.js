@@ -92,7 +92,7 @@
       type: 'LTL_QUOTE_REQUEST',
       version: 1,
       submitted_at: new Date().toISOString(),
-      contact: { name: val('contact_name'), company: val('contact_company'), email: val('contact_email'), phone: val('contact_phone') },
+      contact: { name: val('contact_name'), company: val('contact_company'), email: val('contact_email'), phone: val('contact_phone'), sms_consent: !!(form.elements['contact_sms_consent'] && form.elements['contact_sms_consent'].checked) },
       shipment: {
         ship_date: val('ship_date'),
         origin_zip: val('origin_zip'), origin_city: val('origin_city'),
@@ -121,6 +121,7 @@
     lines.push('Company: ' + r.contact.company);
     lines.push('Email: ' + r.contact.email);
     lines.push('Phone: ' + r.contact.phone);
+    lines.push('SMS consent: ' + (r.contact.sms_consent ? 'YES (consented to SMS on shipsrl.com)' : 'no'));
     lines.push('');
     lines.push('Ship date: ' + r.shipment.ship_date);
     lines.push('Origin zip: ' + r.shipment.origin_zip + (r.shipment.origin_city ? ' (' + r.shipment.origin_city + ')' : ''));
