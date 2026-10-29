@@ -162,6 +162,9 @@ p { margin: 0 0 1em; }
 }
 .person strong { display: block; color: var(--navy); }
 .person span { color: var(--muted); font-size: 0.95rem; }
+.person .direct { display: block; margin-top: 8px; font-size: 0.9rem; color: var(--navy); text-decoration: none; font-weight: 600; }
+.person .direct + .direct { margin-top: 2px; font-weight: 400; }
+.person .direct:hover { color: var(--orange); }
 
 /* Contact */
 .contact-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 48px; }
