@@ -1,0 +1,34 @@
+/* LTL quote page */
+.ltl-form { max-width: 980px; margin: 0 auto; }
+.ltl-block {
+  background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px 32px; margin-bottom: 22px;
+  box-shadow: var(--shadow);
+}
+.ltl-block h2 { font-size: 1.3rem; margin-bottom: 6px; }
+.ltl-block .hint { color: var(--muted); font-size: 0.95rem; margin-bottom: 14px; }
+.ltl-form .row.three { grid-template-columns: repeat(3, 1fr); }
+.ltl-form .row.four { grid-template-columns: repeat(4, 1fr); }
+.chips { border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px 16px; margin: 10px 0 0; }
+.chips legend { font-weight: 700; color: var(--navy); padding: 0 6px; }
+.chips label { display: inline-flex; align-items: center; gap: 8px; margin: 8px 14px 0 0; font-weight: 500; font-size: 0.95rem; }
+.chips input { width: auto; }
+.checkline { display: flex; align-items: flex-end; padding-bottom: 12px; }
+.checkline label { display: inline-flex; align-items: center; gap: 10px; margin: 0; font-weight: 600; }
+.checkline input { width: auto; }
+.totals { display: flex; align-items: flex-end; padding-bottom: 14px; font-weight: 700; color: var(--navy); }
+.item { border: 1px solid var(--line); border-radius: 10px; padding: 6px 18px 18px; margin-bottom: 14px; background: var(--bg-soft); }
+.item-head { display: flex; justify-content: space-between; align-items: center; padding-top: 10px; }
+.item-head strong { color: var(--navy); }
+.item .remove { background: none; border: 0; color: var(--muted); font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+.item .remove:hover { color: #b3261e; }
+.hazmat.hidden { display: none; }
+.ltl-submit { text-align: center; }
+.ltl-submit .btn { width: auto; min-width: 320px; }
+.ltl-submit .note { color: var(--muted); font-size: 0.9rem; margin-top: 12px; }
+.ltl-form input:invalid.touched, .ltl-form select:invalid.touched { border-color: #b3261e; }
+@media (max-width: 960px) { .ltl-form .row.four { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 720px) {
+  .ltl-block { padding: 20px; }
+  .ltl-form .row.three, .ltl-form .row.four { grid-template-columns: 1fr; }
+  .ltl-submit .btn { width: 100%; min-width: 0; }
+}

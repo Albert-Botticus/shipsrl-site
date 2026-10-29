@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LTL Quote | SRL Logistics, an Armstrong Transport Group Agency</title>
+  <meta name="description" content="Request an LTL freight quote from SRL Logistics. Enter your pickup and delivery zips, ship date, accessorials, and pallet details and we will price it through Armstrong Transport Group's LTL carriers.">
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/ltl.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="index.html">
+      <img src="img/srl-logo-round.png" alt="SRL Logistics logo">
+      <div><strong>SRL Logistics</strong><span>AN ARMSTRONG TRANSPORT GROUP AGENCY</span></div>
+    </a>
+    <button class="nav-toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <nav class="nav">
+      <a href="index.html#services">Services</a>
+      <a href="index.html#why">Why SRL</a>
+      <a href="ltl-quote.html">LTL quote</a>
+      <a href="carriers.html">Carriers</a>
+      <a href="index.html#contact">Contact</a>
+      <a class="btn primary" href="index.html#contact">Request a quote</a>
+    </nav>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">LTL quote request</span>
+    <h1>Get an LTL quote.</h1>
+    <p class="lead">Fill in the shipment the same way our carriers price it: ship date, zips, accessorials, and a line for each item. We price it through Armstrong Transport Group's LTL network and reply by email, usually within the hour on business days.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <form id="ltl-form" class="ltl-form" novalidate>
+
+      <div class="ltl-block">
+        <h2>Your contact details</h2>
+        <div class="row">
+          <div><label for="c-name">Your name *</label><input id="c-name" name="contact_name" type="text" required></div>
+          <div><label for="c-company">Company *</label><input id="c-company" name="contact_company" type="text" required></div>
+        </div>
+        <div class="row">
+          <div><label for="c-email">Email *</label><input id="c-email" name="contact_email" type="email" required></div>
+          <div><label for="c-phone">Phone</label><input id="c-phone" name="contact_phone" type="tel"></div>
+        </div>
+      </div>
+
+      <div class="ltl-block">
+        <h2>Shipment</h2>
+        <p class="hint">Quotes are contingent on the actual ship date. Pick the date closest to when the freight will actually ship.</p>
+        <div class="row three">
+          <div><label for="ship-date">Expected ship date *</label><input id="ship-date" name="ship_date" type="date" required></div>
+          <div><label for="origin-zip">Origin zip *</label><input id="origin-zip" name="origin_zip" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="43081" required></div>
+          <div><label for="dest-zip">Destination zip *</label><input id="dest-zip" name="destination_zip" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="28203" required></div>
+        </div>
+        <div class="row three">
+          <div><label for="origin-city">Origin city, state</label><input id="origin-city" name="origin_city" type="text" placeholder="Optional"></div>
+          <div><label for="dest-city">Destination city, state</label><input id="dest-city" name="destination_city" type="text" placeholder="Optional"></div>
+          <div><label for="declared">Declared value ($)</label><input id="declared" name="declared_value" type="number" min="0" step="1" placeholder="Optional"></div>
+        </div>
+      </div>
+
+      <div class="ltl-block">
+        <h2>Accessorials</h2>
+        <p class="hint">Check anything that applies. These change the rate, so it is better to tell us now than at pickup.</p>
+        <div class="row">
+          <fieldset class="chips">
+            <legend>Pickup</legend>
+            <label><input type="checkbox" name="pickup_accessorial" value="Airport"> Airport</label>
+            <label><input type="checkbox" name="pickup_accessorial" value="Appointment"> Appointment</label>
+            <label><input type="checkbox" name="pickup_accessorial" value="CFS"> CFS</label>
+            <label><input type="checkbox" name="pickup_accessorial" value="Inside"> Inside</label>
+            <label><input type="checkbox" name="pickup_accessorial" value="Liftgate"> Liftgate</label>
+            <label><input type="checkbox" name="pickup_accessorial" value="Limited Access"> Limited access</label>
+            <label><input type="checkbox" name="pickup_accessorial" value="Protect From Freeze"> Protect from freeze</label>
+            <label><input type="checkbox" name="pickup_accessorial" value="Residential"> Residential</label>
+            <label><input type="checkbox" name="pickup_accessorial" value="Sort & Segregate"> Sort and segregate</label>
+            <label><input type="checkbox" name="pickup_accessorial" value="Trade Show"> Trade show</label>
+          </fieldset>
+          <fieldset class="chips">
+            <legend>Delivery</legend>
+            <label><input type="checkbox" name="delivery_accessorial" value="Airport"> Airport</label>
+            <label><input type="checkbox" name="delivery_accessorial" value="Appointment"> Appointment</label>
+            <label><input type="checkbox" name="delivery_accessorial" value="CFS"> CFS</label>
+            <label><input type="checkbox" name="delivery_accessorial" value="Inside"> Inside</label>
+            <label><input type="checkbox" name="delivery_accessorial" value="Liftgate"> Liftgate</label>
+            <label><input type="checkbox" name="delivery_accessorial" value="Limited Access"> Limited access</label>
+            <label><input type="checkbox" name="delivery_accessorial" value="Notification"> Notification</label>
+            <label><input type="checkbox" name="delivery_accessorial" value="Residential"> Residential</label>
+            <label><input type="checkbox" name="delivery_accessorial" value="Sort & Segregate"> Sort and segregate</label>
+            <label><input type="checkbox" name="delivery_accessorial" value="Trade Show"> Trade show</label>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="ltl-block">
+        <h2>Items picking up</h2>
+        <p class="hint">One line per handling unit type. Weight is the total for that line. If you do not know the freight class, leave it on "Not sure" and give us dimensions; density decides it.</p>
+        <div id="items"></div>
+        <button type="button" class="btn outline" id="add-item">Add another item</button>
+        <div class="row three" style="margin-top: 18px;">
+          <div><label for="linear-feet">Total linear feet (override)</label><input id="linear-feet" name="linear_feet" type="number" min="0" step="0.5" placeholder="Optional"></div>
+          <div class="checkline"><label><input type="checkbox" name="stackable" value="yes"> Freight is stackable</label></div>
+          <div class="totals" id="totals">Total weight: 0 lb</div>
+        </div>
+      </div>
+
+      <div class="ltl-block">
+        <h2>Hazmat</h2>
+        <div class="checkline"><label><input type="checkbox" name="hazmat" value="yes" id="hazmat-toggle"> This shipment contains hazardous materials</label></div>
+        <div id="hazmat-fields" class="hazmat hidden">
+          <div class="row three">
+            <div><label for="hz-un">UN or NA number</label><input id="hz-un" name="hazmat_un" type="text" placeholder="UN1993"></div>
+            <div><label for="hz-class">Hazard class</label><input id="hz-class" name="hazmat_class" type="text" placeholder="3"></div>
+            <div><label for="hz-pg">Packing group</label>
+              <select id="hz-pg" name="hazmat_packing_group"><option value="">Select</option><option>I</option><option>II</option><option>III</option><option>None</option></select>
+            </div>
+          </div>
+          <div class="row">
+            <div><label for="hz-name">Proper shipping name</label><input id="hz-name" name="hazmat_shipping_name" type="text"></div>
+            <div><label for="hz-contact">24-hour emergency contact (name and phone)</label><input id="hz-contact" name="hazmat_emergency_contact" type="text"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ltl-block">
+        <h2>Anything else</h2>
+        <label for="notes">Dock hours, reference numbers, special handling, or the rate you are trying to beat</label>
+        <textarea id="notes" name="notes"></textarea>
+      </div>
+
+      <div class="ltl-submit">
+        <button class="btn primary" type="submit">Send LTL quote request</button>
+        <p class="note" id="ltl-status">We reply to the email you entered. Need it faster? Call 614-855-9504.</p>
+      </div>
+
+      <template id="item-template">
+        <div class="item">
+          <div class="item-head"><strong>Item <span class="n">1</span></strong><button type="button" class="remove" aria-label="Remove item">Remove</button></div>
+          <div class="row four">
+            <div><label>Number of units *</label><input name="item_units" type="number" min="1" step="1" value="1" required></div>
+            <div><label>Unit type *</label>
+              <select name="item_unit_type" required>
+                <option>Pallets</option><option>Skids</option><option>Boxes</option><option>Cartons</option><option>Cases</option><option>Crates</option><option>Drums</option><option>Pails</option><option>Totes</option><option>Bags</option><option>Bundles</option><option>Items</option><option>Parts</option><option>Pieces</option><option>Units</option>
+              </select>
+            </div>
+            <div><label>Pieces per unit</label><input name="item_pieces" type="number" min="0" step="1" placeholder="Optional"></div>
+            <div><label>Total weight (lb) *</label><input name="item_weight" type="number" min="1" step="1" required></div>
+          </div>
+          <div class="row four">
+            <div><label>Length (in)</label><input name="item_length" type="number" min="0" step="1" placeholder="48"></div>
+            <div><label>Width (in)</label><input name="item_width" type="number" min="0" step="1" placeholder="40"></div>
+            <div><label>Height (in)</label><input name="item_height" type="number" min="0" step="1" placeholder="48"></div>
+            <div><label>Freight class</label>
+              <select name="item_class">
+                <option value="">Not sure</option>
+                <option>50</option><option>55</option><option>60</option><option>65</option><option>70</option><option>77.5</option><option>85</option><option>92.5</option><option>100</option><option>110</option><option>125</option><option>150</option><option>175</option><option>200</option><option>250</option><option>300</option><option>400</option><option>500</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div><label>Item description</label><input name="item_description" type="text" placeholder="What is it? Example: palletized washers, boxed auto parts"></div>
+            <div><label>NMFC number</label><input name="item_nmfc" type="text" placeholder="Optional"></div>
+          </div>
+        </div>
+      </template>
+    </form>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div>
+      <h4>SRL Logistics</h4>
+      <p>An independent freight agency of <a href="https://www.armstrongtransport.com/" target="_blank" rel="noopener">Armstrong Transport Group</a>, Charlotte, North Carolina. Full truckload, LTL, and dedicated capacity for manufacturers and shippers, Midwest to nationwide.</p>
+    </div>
+    <div>
+      <h4>Company</h4>
+      <ul>
+        <li><a href="index.html#services">Services</a></li>
+        <li><a href="ltl-quote.html">LTL quote</a></li>
+        <li><a href="carriers.html">For carriers</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:+16148559504">614-855-9504</a></li>
+        <li><a href="mailto:SRLteam@armstrongtransport.com">SRLteam@armstrongtransport.com</a></li>
+        <li><a href="https://www.facebook.com/profile.php?id=61565116164609" target="_blank" rel="noopener">Facebook</a></li>
+      </ul>
+    </div>
+    <div class="legal">
+      &copy; <span id="year">2026</span> SRL Logistics LLC. Freight brokerage services are provided under the authority of Armstrong Transport Group, Inc., MC 555609, USDOT 2236080.
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/ltl.js"></script>
+</body>
+</html>
