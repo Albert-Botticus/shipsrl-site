@@ -227,7 +227,8 @@ form .note { font-size: 0.85rem; color: var(--muted); margin-top: 10px; }
 }
 
 /* SMS consent (TCR): optional, unchecked by default, next to the phone field */
-.sms-consent { margin-top: 12px; }
-.sms-consent-label { display: flex; align-items: flex-start; gap: 10px; font-weight: 400; font-size: 0.86rem; line-height: 1.5; color: #4a5667; margin: 0; }
-.sms-consent-label input { width: auto; margin: 3px 0 0; flex: 0 0 auto; }
-.sms-consent-label a { color: var(--navy); text-decoration: underline; }
+form .sms-consent { margin-top: 12px; }
+form label.sms-consent-label { display: flex; flex-direction: row; align-items: flex-start; gap: 10px; font-weight: 400; font-size: 0.86rem; line-height: 1.5; color: #4a5667; margin: 0; cursor: pointer; }
+form label.sms-consent-label input[type="checkbox"] { width: 18px; height: 18px; min-width: 18px; padding: 0; margin: 2px 0 0; flex: 0 0 auto; display: inline-block; accent-color: #f2781e; }
+form label.sms-consent-label span { flex: 1 1 auto; text-align: left; }
+form label.sms-consent-label a { color: var(--navy); text-decoration: underline; }
