@@ -154,9 +154,21 @@
     return ok;
   }
 
+  var sending = false;
   form.addEventListener('submit', function (event) {
     event.preventDefault();
     var status = document.getElementById('ltl-status');
+    var button = form.querySelector('button[type="submit"]');
+    // One submission at a time: a second click mid-flight duplicates the lead and
+    // burns another of the 50 monthly Formspree submissions.
+    if (sending) return;
+    // Honeypot: hidden from real visitors, so anything in it is a bot. Reported as
+    // sent so the bot does not retry, but nothing is transmitted.
+    if (val('_gotcha')) {
+      status.textContent = 'Sent. We will reply with your quote.';
+      if (button) button.disabled = true;
+      return;
+    }
     if (!validate()) {
       status.textContent = 'Please fill in the required fields marked with *.';
       var bad = form.querySelector(':invalid');
@@ -167,19 +179,33 @@
     var subject = 'LTL Quote Request: ' + request.shipment.origin_zip + ' to ' + request.shipment.destination_zip + ' (' + request.contact.company + ')';
     var text = toText(request);
 
+    // Fallback only. It never claims the request was sent.
+    var fallback = function (reason) {
+      sending = false;
+      if (button) button.disabled = false;
+      if (window.srlTrack) window.srlTrack('quote_submit_failed', { form: 'ltl', reason: reason });
+      status.textContent = 'That did not go through. Opening your email app instead - or email ' + TO_ADDRESS + ' or call 614-855-9504.';
+      window.location.href = 'mailto:' + TO_ADDRESS + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(text);
+    };
+
     if (FORM_ENDPOINT) {
+      sending = true;
+      if (button) button.disabled = true;
       status.textContent = 'Sending...';
       fetch(FORM_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({ _subject: subject, email: request.contact.email, _replyto: request.contact.email, message: text })
       }).then(function (res) {
-        if (!res.ok) throw new Error('HTTP ' + res.status);
+        if (!res.ok) throw new Error('http_' + res.status);
+        // Success is only ever declared here, after Formspree accepts the POST.
+        sending = false;
         status.textContent = 'Sent. We will reply to ' + request.contact.email + ' with your quote.';
-        form.querySelector('button[type="submit"]').disabled = true;
-      }).catch(function () {
-        status.textContent = 'That did not go through. Opening your email app instead.';
-        window.location.href = 'mailto:' + TO_ADDRESS + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(text);
+        if (button) button.disabled = true;
+        if (window.srlTrack) window.srlTrack('ltl_quote_submitted', { form: 'ltl' });
+      }).catch(function (err) {
+        var reason = String(err && err.message || '').indexOf('http_') === 0 ? err.message : 'network';
+        fallback(reason);
       });
       return;
     }

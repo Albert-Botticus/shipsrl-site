@@ -229,8 +229,11 @@
           </div>
           <label for="details">Details (weight, pallets, dock hours, anything we should know)</label>
           <textarea id="details" name="details"></textarea>
+          <!-- Spam honeypot: hidden from people, tempting to bots. Formspree also drops
+               submissions where _gotcha is filled (Formspree docs, "Honeypot spam filtering"). -->
+          <div class="hp" aria-hidden="true"><label for="hp-gotcha">Leave this field empty</label><input id="hp-gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off"></div>
           <button class="btn primary" type="submit">Send quote request</button>
-          <p class="note" id="form-status">This opens your email app with the request filled in and addressed to our team.</p>
+          <p class="note" id="form-status" role="status" aria-live="polite">We reply to the email you enter, usually within the hour on business days.</p>
         </form>
       </div>
     </div>
@@ -267,6 +270,7 @@
   </div>
 </footer>
 
+<script src="js/track.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

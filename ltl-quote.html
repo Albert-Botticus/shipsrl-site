@@ -25,7 +25,8 @@
     <nav class="nav">
       <a href="index.html#services">Services</a>
       <a href="index.html#why">Why SRL</a>
-      <a href="ltl-quote.html">LTL quote</a>
+      <a href="index.html#how">How it works</a>
+      <a href="ltl-quote.html" aria-current="page">LTL quote</a>
       <a href="carriers.html">Carriers</a>
       <a href="index.html#contact">Contact</a>
       <a class="btn primary" href="index.html#contact">Request a quote</a>
@@ -142,8 +143,12 @@
       </div>
 
       <div class="ltl-submit">
+        <!-- Spam honeypot: hidden from people, tempting to bots. Formspree also drops
+             submissions where _gotcha is filled (Formspree docs, "Honeypot spam filtering").
+             Not read by buildRequest(), so the TMS payload is unchanged. -->
+        <div class="hp" aria-hidden="true"><label for="hp-gotcha">Leave this field empty</label><input id="hp-gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off"></div>
         <button class="btn primary" type="submit">Send LTL quote request</button>
-        <p class="note" id="ltl-status">We reply to the email you entered. Need it faster? Call 614-855-9504.</p>
+        <p class="note" id="ltl-status" role="status" aria-live="polite">We reply to the email you entered. Need it faster? Call 614-855-9504.</p>
       </div>
 
       <template id="item-template">
@@ -209,6 +214,7 @@
   </div>
 </footer>
 
+<script src="js/track.js"></script>
 <script src="js/main.js"></script>
 <script src="js/ltl.js"></script>
 </body>

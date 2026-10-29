@@ -18,10 +18,22 @@
   var FORM_ENDPOINT = 'https://formspree.io/f/mqpplker';
   var form = document.getElementById('quote-form');
   if (form) {
+    var sending = false;
     form.addEventListener('submit', function (event) {
       event.preventDefault();
       var status = document.getElementById('form-status');
+      var button = form.querySelector('button[type="submit"]');
       var get = function (name) { var el = form.elements[name]; return el ? String(el.value || '').trim() : ''; };
+      // One submission at a time: a second click while the first is in flight would
+      // send a duplicate lead and burn a second Formspree submission.
+      if (sending) return;
+      // Honeypot: a real visitor never sees this field, so anything in it is a bot.
+      // Reported as sent so the bot does not retry, but nothing is transmitted.
+      if (get('_gotcha')) {
+        if (status) status.textContent = 'Sent. We will reply shortly.';
+        if (button) button.disabled = true;
+        return;
+      }
       if (!get('name') || !get('email')) {
         if (status) status.textContent = 'Please add your name and email so we can reply.';
         return;
@@ -41,21 +53,34 @@
       ];
       var subject = 'Quote request: ' + (get('origin') || 'origin') + ' to ' + (get('destination') || 'destination') + (get('company') ? ' (' + get('company') + ')' : '');
       var text = lines.join('\n');
-      var fallback = function () {
+      // Fallback only. It never claims the request was sent: the visitor is told it
+      // did not go through and that their email app is opening with the same text.
+      var fallback = function (reason) {
+        sending = false;
+        if (button) button.disabled = false;
+        if (window.srlTrack) window.srlTrack('quote_submit_failed', { form: 'truckload', reason: reason });
+        if (status) status.textContent = 'That did not go through. Opening your email app instead - or email SRLteam@armstrongtransport.com or call 614-855-9504.';
         window.location.href = 'mailto:SRLteam@armstrongtransport.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(text);
-        if (status) status.textContent = 'Your email app should open with the request filled in. If it does not, email SRLteam@armstrongtransport.com or call 614-855-9504.';
       };
-      if (!FORM_ENDPOINT) return fallback();
+      if (!FORM_ENDPOINT) return fallback('no_endpoint');
+      sending = true;
+      if (button) button.disabled = true;
       if (status) status.textContent = 'Sending...';
       fetch(FORM_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({ _subject: subject, email: get('email'), _replyto: get('email'), message: text, kind: 'TRUCKLOAD_QUOTE_REQUEST' })
       }).then(function (res) {
-        if (!res.ok) throw new Error('HTTP ' + res.status);
+        if (!res.ok) throw new Error('http_' + res.status);
+        // Success is only ever declared here, after Formspree accepts the POST.
+        sending = false;
         if (status) status.textContent = 'Sent. We will reply to ' + get('email') + ' shortly.';
-        form.querySelector('button[type="submit"]').disabled = true;
-      }).catch(fallback);
+        if (button) button.disabled = true;
+        if (window.srlTrack) window.srlTrack('truckload_quote_submitted', { form: 'truckload' });
+      }).catch(function (err) {
+        var reason = String(err && err.message || '').indexOf('http_') === 0 ? err.message : 'network';
+        fallback(reason);
+      });
     });
   }
 
