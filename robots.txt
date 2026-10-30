@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /signature/
+Disallow: /tools/
+
+Sitemap: https://shipsrl.com/sitemap.xml
