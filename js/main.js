@@ -38,12 +38,15 @@
         if (status) status.textContent = 'Please add your name and email so we can reply.';
         return;
       }
+      // How the visitor found us (Google Ads click id, campaign tags, referrer). See js/track.js.
+      var attribution = window.srlAttribution ? window.srlAttribution() : { source: 'unknown' };
       var lines = [
         'Name: ' + get('name'),
         'Company: ' + get('company'),
         'Email: ' + get('email'),
         'Phone: ' + get('phone'),
         'SMS consent: ' + (form.elements['sms_consent'] && form.elements['sms_consent'].checked ? 'YES (consented to SMS on shipsrl.com)' : 'no'),
+        'Source: ' + (attribution.source || 'unknown') + (attribution.gclid ? ' | gclid ' + attribution.gclid : '') + (attribution.landing_page ? ' | landed on ' + attribution.landing_page : ''),
         'Origin: ' + get('origin'),
         'Destination: ' + get('destination'),
         'Equipment: ' + get('equipment'),
@@ -70,7 +73,7 @@
       fetch(FORM_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ _subject: subject, email: get('email'), _replyto: get('email'), message: text, kind: 'TRUCKLOAD_QUOTE_REQUEST' })
+        body: JSON.stringify({ _subject: subject, email: get('email'), _replyto: get('email'), message: text, kind: 'TRUCKLOAD_QUOTE_REQUEST', attribution: attribution })
       }).then(function (res) {
         if (!res.ok) throw new Error('http_' + res.status);
         // Success is only ever declared here, after Formspree accepts the POST.
