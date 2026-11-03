@@ -23,6 +23,19 @@ The LTL form deliberately mirrors Armstrong's ATGFr8 LTL Quoting screen field fo
 submission can be typed into the TMS without translation. Do not rename or remove its fields,
 accessorial values, or JSON structure.
 
+Added 2026-11-03 (JSON `version: 2`, all additive):
+
+- `contact.website`: optional company website (free text; type=url would reject "example.com").
+- Per item: `estimated_class` and `class_source` (`customer` | `estimated` | `unknown`). The
+  estimate is the NMFC 13-sub density scale (Docket 2025-1, July 2025) in `DENSITY_SCALE` in
+  js/ltl.js. It is shown under the class dropdown as the visitor types, and it also warns when a
+  customer-entered class disagrees with density and no NMFC number was given.
+- `freight_class_notice`: `{ items_without_class, acknowledged }`. The page shows a standing
+  notice that carriers can reweigh/reclass and bill the corrected class. When any item is left on
+  "Not sure", a required acknowledgment checkbox appears (hidden and not required otherwise).
+- Plain-text copy gains `Website:` and `Freight class notice:` lines, and an `| est. class ...`
+  tail on each item line (appended last so `parse-request.mjs` positional parsing is unchanged).
+
 ### Spam
 
 Both forms carry a hidden `_gotcha` honeypot (Formspree's documented honeypot field). The page

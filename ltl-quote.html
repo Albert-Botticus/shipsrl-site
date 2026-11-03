@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css?v=5">
-  <link rel="stylesheet" href="css/ltl.css?v=4">
+  <link rel="stylesheet" href="css/ltl.css?v=5">
 </head>
 <body>
 
@@ -61,9 +61,10 @@
           <div><label for="c-name">Your name *</label><input id="c-name" name="contact_name" type="text" required></div>
           <div><label for="c-company">Company *</label><input id="c-company" name="contact_company" type="text" required></div>
         </div>
-        <div class="row">
+        <div class="row three">
           <div><label for="c-email">Email *</label><input id="c-email" name="contact_email" type="email" required></div>
           <div><label for="c-phone">Phone</label><input id="c-phone" name="contact_phone" type="tel"></div>
+          <div><label for="c-website">Company website</label><input id="c-website" name="contact_website" type="text" inputmode="url" autocomplete="url" placeholder="Optional, example: yourcompany.com"></div>
         </div>
         <div class="sms-consent">
             <label class="sms-consent-label"><input id="c-sms-consent" name="contact_sms_consent" type="checkbox" value="yes"> <span>I consent to receive conversational and informational SMS from SRL Logistics about my quotes and shipments. Reply STOP to opt-out; Reply HELP for support; Message &amp; data rates may apply; Messaging frequency may vary. <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and <a href="terms.html#sms" target="_blank" rel="noopener">SMS Terms of Service</a>.</span></label>
@@ -120,13 +121,44 @@
 
       <div class="ltl-block">
         <h2>Items picking up</h2>
-        <p class="hint">One line per handling unit type. Weight is the total for that line. If you do not know the freight class, leave it on "Not sure" and give us dimensions; density decides it.</p>
+        <p class="hint">One line per handling unit type. Weight is the total for that line, pallet included. Measure each handling unit the way it will ship: length, width, and height with the pallet under it.</p>
+        <div class="notice" id="class-notice">
+          <strong>Not sure of your freight class? That is common, and it is fine.</strong>
+          <p>Leave the class on "Not sure" and give us accurate weight and dimensions. Freight class is set by the National Motor Freight Classification (NMFC), and for most goods it comes from density: pounds per cubic foot. As you type, each item shows its estimated density class, and we will do our best to quote the right class for you.</p>
+          <p>One thing to know up front: LTL carriers can reweigh and re-measure freight after pickup. If their numbers put it in a different class, they bill the corrected class, and that change shows up on the final invoice. Accurate dimensions and weight now are the best protection against a surprise later.</p>
+          <details>
+            <summary>How we estimate freight class from density</summary>
+            <p>Cubic feet = length x width x height in inches, divided by 1,728. Density = total weight divided by cubic feet. The density then falls into one of these bands on the NMFC density scale (in effect since July 2025):</p>
+            <table class="class-table">
+              <thead><tr><th>Density (lb per cu ft)</th><th>Class</th></tr></thead>
+              <tbody>
+                <tr><td>50 or more</td><td>50</td></tr>
+                <tr><td>35 to under 50</td><td>55</td></tr>
+                <tr><td>30 to under 35</td><td>60</td></tr>
+                <tr><td>22.5 to under 30</td><td>65</td></tr>
+                <tr><td>15 to under 22.5</td><td>70</td></tr>
+                <tr><td>12 to under 15</td><td>85</td></tr>
+                <tr><td>10 to under 12</td><td>92.5</td></tr>
+                <tr><td>8 to under 10</td><td>100</td></tr>
+                <tr><td>6 to under 8</td><td>125</td></tr>
+                <tr><td>4 to under 6</td><td>175</td></tr>
+                <tr><td>2 to under 4</td><td>250</td></tr>
+                <tr><td>1 to under 2</td><td>300</td></tr>
+                <tr><td>Under 1</td><td>400</td></tr>
+              </tbody>
+            </table>
+            <p>Lower density means a higher class and a higher rate, so loose, light, or oversized freight costs more per pound than dense freight. Some commodities carry a fixed NMFC class regardless of density because of handling, stowability, or liability, so the estimate is a starting point, not a guarantee. If you know your NMFC item number, enter it and we will use it.</p>
+          </details>
+        </div>
         <div id="items"></div>
         <button type="button" class="btn outline" id="add-item">Add another item</button>
         <div class="row three" style="margin-top: 18px;">
           <div><label for="linear-feet">Total linear feet (override)</label><input id="linear-feet" name="linear_feet" type="number" min="0" step="0.5" placeholder="Optional"></div>
           <div class="checkline"><label><input type="checkbox" name="stackable" value="yes"> Freight is stackable</label></div>
           <div class="totals" id="totals">Total weight: 0 lb</div>
+        </div>
+        <div class="checkline ack hidden" id="class-ack">
+          <label><input type="checkbox" name="class_estimate_ack" value="yes" id="class-ack-box"> <span>I understand that SRL will estimate the freight class for items marked "Not sure", that the carrier may reclassify or reweigh the freight after pickup, and that a reclass can change the final bill. *</span></label>
         </div>
       </div>
 
@@ -185,6 +217,7 @@
                 <option value="">Not sure</option>
                 <option>50</option><option>55</option><option>60</option><option>65</option><option>70</option><option>77.5</option><option>85</option><option>92.5</option><option>100</option><option>110</option><option>125</option><option>150</option><option>175</option><option>200</option><option>250</option><option>300</option><option>400</option><option>500</option>
               </select>
+              <p class="class-est" aria-live="polite"></p>
             </div>
           </div>
           <div class="row">

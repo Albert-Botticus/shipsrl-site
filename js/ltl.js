@@ -34,6 +34,19 @@
 
   function num(el) { var v = parseFloat(el && el.value); return isNaN(v) ? 0 : v; }
 
+  // NMFC density scale (13 subs, Docket 2025-1, in effect since July 2025):
+  // minimum lb per cubic foot for each class, densest first. Only an estimate;
+  // commodities with a fixed NMFC class rate on that class regardless of density.
+  var DENSITY_SCALE = [
+    [50, '50'], [35, '55'], [30, '60'], [22.5, '65'], [15, '70'], [12, '85'], [10, '92.5'],
+    [8, '100'], [6, '125'], [4, '175'], [2, '250'], [1, '300'], [0, '400']
+  ];
+  function densityClass(pcf) {
+    if (!pcf || pcf <= 0) return '';
+    for (var i = 0; i < DENSITY_SCALE.length; i++) if (pcf >= DENSITY_SCALE[i][0]) return DENSITY_SCALE[i][1];
+    return '400';
+  }
+
   function itemRows() {
     return Array.prototype.map.call(items.querySelectorAll('.item'), function (item) {
       var f = function (name) { return item.querySelector('[name="' + name + '"]'); };
@@ -41,19 +54,53 @@
       var L = num(f('item_length')), W = num(f('item_width')), H = num(f('item_height'));
       var weight = num(f('item_weight'));
       var cubic = L && W && H ? (L * W * H / 1728) * units : 0;
+      var pcf = cubic ? Math.round((weight / cubic) * 10) / 10 : null;
+      var chosen = f('item_class').value;
       return {
         units: units,
         unit_type: f('item_unit_type').value,
         pieces: f('item_pieces').value,
         weight_lb: weight,
         length_in: L, width_in: W, height_in: H,
-        freight_class: f('item_class').value || 'Not sure',
+        freight_class: chosen || 'Not sure',
+        class_source: chosen ? 'customer' : (pcf ? 'estimated' : 'unknown'),
+        estimated_class: pcf ? densityClass(pcf) : null,
         nmfc: f('item_nmfc').value.trim(),
         description: f('item_description').value.trim(),
         cubic_feet: cubic ? Math.round(cubic * 10) / 10 : null,
-        pcf: cubic ? Math.round((weight / cubic) * 10) / 10 : null
+        pcf: pcf
       };
     });
+  }
+
+  // Per-item readout under the class dropdown, and the reclass acknowledgment
+  // that only appears when at least one item is left on "Not sure".
+  var ackWrap = document.getElementById('class-ack');
+  var ackBox = document.getElementById('class-ack-box');
+  function updateClassHints(rows) {
+    var nodes = items.querySelectorAll('.item');
+    var anyUnknown = false;
+    rows.forEach(function (r, i) {
+      var out = nodes[i] && nodes[i].querySelector('.class-est');
+      if (!out) return;
+      out.classList.remove('warn');
+      if (r.freight_class === 'Not sure') {
+        anyUnknown = true;
+        if (r.estimated_class) out.textContent = 'Estimated from density: class ' + r.estimated_class + ' (' + r.pcf + ' lb/cu ft). We will confirm it.';
+        else out.textContent = 'Enter weight and dimensions and we will estimate the class.';
+      } else if (r.estimated_class && r.estimated_class !== r.freight_class && !r.nmfc) {
+        out.textContent = 'Density suggests class ' + r.estimated_class + ' (' + r.pcf + ' lb/cu ft). We will check it before quoting.';
+        out.classList.add('warn');
+      } else {
+        out.textContent = '';
+      }
+    });
+    if (ackWrap && ackBox) {
+      ackWrap.classList.toggle('hidden', !anyUnknown);
+      ackBox.required = anyUnknown;
+      if (!anyUnknown) ackBox.classList.remove('touched');
+    }
+    return anyUnknown;
   }
 
   function recalc() {
@@ -64,6 +111,7 @@
     var text = 'Total: ' + units + ' handling unit' + (units === 1 ? '' : 's') + ', ' + weight + ' lb';
     if (cubic) text += ', ' + (Math.round(cubic * 10) / 10) + ' cu ft, ' + (Math.round((weight / cubic) * 10) / 10) + ' PCF';
     totals.textContent = text;
+    updateClassHints(rows);
   }
 
   var hazToggle = document.getElementById('hazmat-toggle');
@@ -88,11 +136,13 @@
   function val(name) { var el = form.elements[name]; return el ? String(el.value || '').trim() : ''; }
 
   function buildRequest() {
+    var rows = itemRows();
+    var unknown = rows.filter(function (r) { return r.freight_class === 'Not sure'; }).length;
     return {
       type: 'LTL_QUOTE_REQUEST',
-      version: 1,
+      version: 2,
       submitted_at: new Date().toISOString(),
-      contact: { name: val('contact_name'), company: val('contact_company'), email: val('contact_email'), phone: val('contact_phone'), sms_consent: !!(form.elements['contact_sms_consent'] && form.elements['contact_sms_consent'].checked) },
+      contact: { name: val('contact_name'), company: val('contact_company'), email: val('contact_email'), phone: val('contact_phone'), website: val('contact_website'), sms_consent: !!(form.elements['contact_sms_consent'] && form.elements['contact_sms_consent'].checked) },
       shipment: {
         ship_date: val('ship_date'),
         origin_zip: val('origin_zip'), origin_city: val('origin_city'),
@@ -102,12 +152,17 @@
         stackable: form.elements['stackable'].checked
       },
       accessorials: { pickup: checked('pickup_accessorial'), delivery: checked('delivery_accessorial') },
-      items: itemRows(),
+      // Reclass notice: how many items the customer could not class, and whether
+      // they acknowledged that an estimated class may be corrected by the carrier.
+      freight_class_notice: { items_without_class: unknown, acknowledged: !!(ackBox && ackBox.checked) },
+      items: rows,
       hazmat: hazToggle.checked ? {
         un_number: val('hazmat_un'), hazard_class: val('hazmat_class'), packing_group: val('hazmat_packing_group'),
         shipping_name: val('hazmat_shipping_name'), emergency_contact: val('hazmat_emergency_contact')
       } : null,
-      notes: val('notes')
+      notes: val('notes'),
+      // How the visitor found us (Google Ads click id, campaign tags, referrer). See js/track.js.
+      attribution: window.srlAttribution ? window.srlAttribution() : { source: 'unknown' }
     };
   }
 
@@ -121,7 +176,9 @@
     lines.push('Company: ' + r.contact.company);
     lines.push('Email: ' + r.contact.email);
     lines.push('Phone: ' + r.contact.phone);
+    lines.push('Website: ' + (r.contact.website || '-'));
     lines.push('SMS consent: ' + (r.contact.sms_consent ? 'YES (consented to SMS on shipsrl.com)' : 'no'));
+    lines.push('Source: ' + ((r.attribution && r.attribution.source) || 'unknown') + (r.attribution && r.attribution.gclid ? ' | gclid ' + r.attribution.gclid : '') + (r.attribution && r.attribution.landing_page ? ' | landed on ' + r.attribution.landing_page : ''));
     lines.push('');
     lines.push('Ship date: ' + r.shipment.ship_date);
     lines.push('Origin zip: ' + r.shipment.origin_zip + (r.shipment.origin_city ? ' (' + r.shipment.origin_city + ')' : ''));
@@ -131,11 +188,15 @@
     lines.push('Delivery accessorials: ' + (r.accessorials.delivery.join(', ') || 'none'));
     lines.push('Linear feet override: ' + (r.shipment.linear_feet_override || 'none'));
     lines.push('Stackable: ' + (r.shipment.stackable ? 'yes' : 'no'));
+    lines.push('Freight class notice: ' + (r.freight_class_notice.items_without_class
+      ? r.freight_class_notice.items_without_class + ' item(s) without a class; customer acknowledged possible reclass: ' + (r.freight_class_notice.acknowledged ? 'yes' : 'no')
+      : 'all items classed by customer'));
     lines.push('');
     r.items.forEach(function (it, i) {
       lines.push('Item ' + (i + 1) + ': ' + it.units + ' ' + it.unit_type + ' | pieces ' + (it.pieces || '-') + ' | ' + it.weight_lb + ' lb | ' +
         (it.length_in && it.width_in && it.height_in ? it.length_in + 'x' + it.width_in + 'x' + it.height_in + ' in' : 'dims -') +
-        ' | class ' + it.freight_class + ' | NMFC ' + (it.nmfc || '-') + ' | ' + (it.description || '-'));
+        ' | class ' + it.freight_class + ' | NMFC ' + (it.nmfc || '-') + ' | ' + (it.description || '-') +
+        ' | est. class ' + (it.estimated_class ? it.estimated_class + ' (' + it.pcf + ' PCF)' : '-'));
     });
     lines.push('');
     lines.push('Hazmat: ' + (r.hazmat ? 'yes | UN ' + r.hazmat.un_number + ' | class ' + r.hazmat.hazard_class + ' | PG ' + r.hazmat.packing_group + ' | ' + r.hazmat.shipping_name + ' | emergency ' + r.hazmat.emergency_contact : 'no'));
@@ -171,8 +232,10 @@
       return;
     }
     if (!validate()) {
-      status.textContent = 'Please fill in the required fields marked with *.';
       var bad = form.querySelector(':invalid');
+      status.textContent = bad === ackBox
+        ? 'Please tick the freight class box so we know you understand the class may be corrected by the carrier.'
+        : 'Please fill in the required fields marked with *.';
       if (bad) bad.focus();
       return;
     }
