@@ -78,7 +78,9 @@
   }
   function describe(a) {
     if (!a) return 'unknown';
-    if (a.gclid || a.gbraid || a.wbraid) return 'Google Ads' + (a.utm_campaign ? ' (' + a.utm_campaign + ')' : '');
+    // utm_term is filled by the Google Ads {keyword} tag on every ad click, so this reads
+    // "Google Ads | keyword: ltl freight quote (ltl-ohio-search)".
+    if (a.gclid || a.gbraid || a.wbraid) return 'Google Ads' + (a.utm_term ? ' | keyword: ' + a.utm_term : '') + (a.utm_campaign ? ' (' + a.utm_campaign + ')' : '');
     if (a.msclkid) return 'Microsoft Ads';
     if (a.fbclid) return 'Facebook';
     if (a.utm_source) return a.utm_source + (a.utm_medium ? ' / ' + a.utm_medium : '') + (a.utm_campaign ? ' (' + a.utm_campaign + ')' : '');
