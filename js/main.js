@@ -80,7 +80,8 @@
         sending = false;
         if (status) status.textContent = 'Sent. We will reply to ' + get('email') + ' shortly.';
         if (button) button.disabled = true;
-        if (window.srlTrack) window.srlTrack('truckload_quote_submitted', { form: 'truckload' });
+        // Our own test submissions ("test, ignore" in the company name) are not conversions.
+        if (window.srlTrack && !/test,\s*ignore/i.test(get('company'))) window.srlTrack('truckload_quote_submitted', { form: 'truckload' });
       }).catch(function (err) {
         var reason = String(err && err.message || '').indexOf('http_') === 0 ? err.message : 'network';
         fallback(reason);

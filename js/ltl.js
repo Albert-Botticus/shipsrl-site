@@ -398,7 +398,9 @@
         sending = false;
         status.textContent = 'Sent. We will reply to ' + request.contact.email + ' with your quote.';
         if (button) button.disabled = true;
-        if (window.srlTrack) window.srlTrack('ltl_quote_submitted', { form: 'ltl' });
+        // Our own test submissions ("test, ignore" in the company name) must not count as Google
+        // Ads conversions: they would teach the bidding that our tests are customers.
+        if (window.srlTrack && !/test,\s*ignore/i.test(request.contact.company || '')) window.srlTrack('ltl_quote_submitted', { form: 'ltl' });
       }).catch(function (err) {
         var reason = String(err && err.message || '').indexOf('http_') === 0 ? err.message : 'network';
         fallback(reason);
