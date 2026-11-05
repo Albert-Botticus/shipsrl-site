@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css?v=6">
-  <link rel="stylesheet" href="css/ltl.css?v=5">
+  <link rel="stylesheet" href="css/ltl.css?v=6">
 </head>
 <body>
 
@@ -73,15 +73,19 @@
 
       <div class="ltl-block">
         <h2>Shipment</h2>
-        <p class="hint">Quotes are contingent on the actual ship date. Pick the date closest to when the freight will actually ship.</p>
+        <p class="hint">Quotes are contingent on the actual ship date. Pick the date closest to when the freight will actually ship. Type each zip and the city fills in from it, so the two always agree.</p>
         <div class="row three">
           <div><label for="ship-date">Expected ship date *</label><input id="ship-date" name="ship_date" type="date" required></div>
-          <div><label for="origin-zip">Origin zip *</label><input id="origin-zip" name="origin_zip" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="43081" required></div>
-          <div><label for="dest-zip">Destination zip *</label><input id="dest-zip" name="destination_zip" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="28203" required></div>
+          <div><label for="origin-zip">Origin zip *</label><input id="origin-zip" name="origin_zip" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="43081" autocomplete="postal-code" required><p class="zip-note" id="origin-zip-note" aria-live="polite"></p></div>
+          <div><label for="dest-zip">Destination zip *</label><input id="dest-zip" name="destination_zip" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="28203" autocomplete="postal-code" required><p class="zip-note" id="dest-zip-note" aria-live="polite"></p></div>
         </div>
         <div class="row three">
-          <div><label for="origin-city">Origin city, state</label><input id="origin-city" name="origin_city" type="text" placeholder="Optional"></div>
-          <div><label for="dest-city">Destination city, state</label><input id="dest-city" name="destination_city" type="text" placeholder="Optional"></div>
+          <div><label for="origin-city">Origin city, state *</label>
+            <select id="origin-city" name="origin_city" data-zip="origin-zip" disabled><option value="">Enter the origin zip first</option></select>
+          </div>
+          <div><label for="dest-city">Destination city, state *</label>
+            <select id="dest-city" name="destination_city" data-zip="dest-zip" disabled><option value="">Enter the destination zip first</option></select>
+          </div>
           <div><label for="declared">Declared value ($)</label><input id="declared" name="declared_value" type="number" min="0" step="1" placeholder="Optional"></div>
         </div>
       </div>
@@ -265,6 +269,6 @@
 
 <script src="js/track.js"></script>
 <script src="js/main.js"></script>
-<script src="js/ltl.js"></script>
+<script src="js/ltl.js?v=2"></script>
 </body>
 </html>

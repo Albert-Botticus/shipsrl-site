@@ -121,6 +121,133 @@
   document.getElementById('add-item').addEventListener('click', addItem);
   addItem();
 
+  // Zip to city: the city dropdown is filled from the zip (USPS data via api.zippopotam.us,
+  // the same source Albert's zip check uses), the way ATGFr8's own LTL screen does it. The
+  // customer never types a city, so the city can never disagree with the zip. One request
+  // typed the destination city in the origin box and the state in the destination box, and
+  // the quote went out headed "deRidder to la"; this removes that whole class of mistake.
+  // A zip the lookup cannot find blocks submission (a wrong zip means a wrong rate). If the
+  // lookup service itself is unreachable, the form still submits and Albert confirms the city.
+  var ZIP_API = 'https://api.zippopotam.us/us/';
+  var zipCache = {};
+  var zipState = { origin: { zip: '', status: 'empty', city: '' }, destination: { zip: '', status: 'empty', city: '' } };
+
+  function zipField(which) {
+    return which === 'origin'
+      ? { input: document.getElementById('origin-zip'), select: document.getElementById('origin-city'), note: document.getElementById('origin-zip-note'), prompt: 'Enter the origin zip first', word: 'pickup' }
+      : { input: document.getElementById('dest-zip'), select: document.getElementById('dest-city'), note: document.getElementById('dest-zip-note'), prompt: 'Enter the destination zip first', word: 'delivery' };
+  }
+
+  function setNote(f, text, cls) {
+    if (!f.note) return;
+    f.note.textContent = text || '';
+    f.note.className = 'zip-note' + (cls ? ' ' + cls : '');
+  }
+
+  function fillCities(f, places) {
+    f.select.innerHTML = '';
+    if (places.length !== 1) {
+      var blank = document.createElement('option');
+      blank.value = ''; blank.textContent = 'Select the city';
+      f.select.appendChild(blank);
+    }
+    places.forEach(function (p) {
+      var o = document.createElement('option');
+      o.value = p; o.textContent = p;
+      f.select.appendChild(o);
+    });
+    f.select.disabled = false;
+    f.select.required = true;
+    if (places.length === 1) f.select.value = places[0];
+  }
+
+  function resetCity(f, text) {
+    f.select.innerHTML = '';
+    var o = document.createElement('option');
+    o.value = ''; o.textContent = text || f.prompt;
+    f.select.appendChild(o);
+    f.select.disabled = true;
+    f.select.required = false;
+    f.select.classList.remove('touched');
+  }
+
+  function applyZip(which, zip, result) {
+    var f = zipField(which);
+    var st = zipState[which];
+    if (zip !== String(f.input.value || '').trim()) return; // a newer zip is in the box
+    st.zip = zip;
+    if (result.ok) {
+      st.status = 'ok';
+      fillCities(f, result.places);
+      f.input.setCustomValidity('');
+      setNote(f, result.places.length === 1 ? result.places[0] : 'More than one city uses this zip. Pick the ' + f.word + ' city.', 'ok');
+    } else if (result.notFound) {
+      st.status = 'not-found';
+      resetCity(f, 'Zip not found');
+      f.input.setCustomValidity('We could not find zip ' + zip + '. Please check it.');
+      f.input.classList.add('touched');
+      setNote(f, 'We could not find zip ' + zip + '. Please check it.', 'warn');
+    } else {
+      st.status = 'unavailable';
+      resetCity(f, 'City lookup unavailable, we will confirm it');
+      f.input.setCustomValidity('');
+      setNote(f, 'Could not look up this zip right now. We will confirm the city with you by email.', 'warn');
+    }
+    st.city = st.status === 'ok' ? f.select.value : '';
+  }
+
+  function lookupZip(which) {
+    var f = zipField(which);
+    var st = zipState[which];
+    var zip = String(f.input.value || '').replace(/\D/g, '');
+    if (zip !== f.input.value) f.input.value = zip;
+    if (zip.length !== 5) {
+      st.zip = zip; st.status = 'empty'; st.city = '';
+      resetCity(f);
+      f.input.setCustomValidity('');
+      setNote(f, '');
+      return;
+    }
+    if (zipCache[zip]) { applyZip(which, zip, zipCache[zip]); return; }
+    st.status = 'loading';
+    resetCity(f, 'Looking up the city...');
+    setNote(f, 'Looking up ' + zip + '...');
+    var finish = function (result) { zipCache[zip] = result; applyZip(which, zip, result); };
+    if (!window.fetch) { finish({ ok: false }); return; }
+    fetch(ZIP_API + zip, { headers: { 'Accept': 'application/json' } }).then(function (res) {
+      if (res.status === 404) return { notFound: true };
+      if (!res.ok) throw new Error('http_' + res.status);
+      return res.json().then(function (data) {
+        var seen = {};
+        var places = (data.places || []).map(function (p) {
+          return p['place name'] + ', ' + p['state abbreviation'];
+        }).filter(function (p) { if (seen[p]) return false; seen[p] = true; return true; });
+        return places.length ? { ok: true, places: places } : { notFound: true };
+      });
+    }).then(finish).catch(function () { finish({ ok: false }); });
+  }
+
+  ['origin', 'destination'].forEach(function (which) {
+    var f = zipField(which);
+    if (!f.input || !f.select) return;
+    var timer = null;
+    f.input.addEventListener('input', function () {
+      clearTimeout(timer);
+      timer = setTimeout(function () { lookupZip(which); }, 250);
+    });
+    f.input.addEventListener('blur', function () { clearTimeout(timer); lookupZip(which); });
+    f.select.addEventListener('change', function () { zipState[which].city = f.select.value; });
+    if (f.input.value) lookupZip(which);
+  });
+
+  // The city as it should go into the request: only ever a value the zip lookup produced.
+  function cityFor(which) {
+    var st = zipState[which];
+    var f = zipField(which);
+    if (st.status === 'ok' && f.select && f.select.value) return f.select.value;
+    return '';
+  }
+
   // Default ship date: next business day.
   var ship = document.getElementById('ship-date');
   if (ship && !ship.value) {
@@ -145,8 +272,11 @@
       contact: { name: val('contact_name'), company: val('contact_company'), email: val('contact_email'), phone: val('contact_phone'), website: val('contact_website'), sms_consent: !!(form.elements['contact_sms_consent'] && form.elements['contact_sms_consent'].checked) },
       shipment: {
         ship_date: val('ship_date'),
-        origin_zip: val('origin_zip'), origin_city: val('origin_city'),
-        destination_zip: val('destination_zip'), destination_city: val('destination_city'),
+        origin_zip: val('origin_zip'), origin_city: cityFor('origin'),
+        destination_zip: val('destination_zip'), destination_city: cityFor('destination'),
+        // "zip-lookup" = the city came from the zip and cannot disagree with it;
+        // "unavailable" = the lookup service could not be reached, city left blank.
+        city_source: { origin: zipState.origin.status === 'ok' ? 'zip-lookup' : 'unavailable', destination: zipState.destination.status === 'ok' ? 'zip-lookup' : 'unavailable' },
         declared_value: val('declared_value'),
         linear_feet_override: val('linear_feet'),
         stackable: form.elements['stackable'].checked
@@ -235,6 +365,8 @@
       var bad = form.querySelector(':invalid');
       status.textContent = bad === ackBox
         ? 'Please tick the freight class box so we know you understand the class may be corrected by the carrier.'
+        : (bad && bad.validationMessage && /zip/i.test(bad.validationMessage)) ? bad.validationMessage
+        : (bad && bad.tagName === 'SELECT' && /city/.test(bad.id)) ? 'Please pick the city for each zip.'
         : 'Please fill in the required fields marked with *.';
       if (bad) bad.focus();
       return;

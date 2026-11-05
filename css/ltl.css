@@ -40,6 +40,11 @@
 .ltl-submit .btn { width: auto; min-width: 320px; }
 .ltl-submit .note { color: var(--muted); font-size: 0.9rem; margin-top: 12px; }
 .ltl-form input:invalid.touched, .ltl-form select:invalid.touched { border-color: #b3261e; }
+/* Zip to city lookup: the city dropdown is filled from the zip, never typed. */
+.zip-note { font-size: 0.85rem; color: var(--muted); margin: 6px 0 0; min-height: 1.2em; }
+.zip-note.ok { color: #1f7a3a; }
+.zip-note.warn { color: #b3261e; font-weight: 600; }
+.ltl-form select:disabled { background: var(--bg-soft); color: var(--muted); cursor: not-allowed; }
 @media (max-width: 960px) { .ltl-form .row.four { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 720px) {
   .ltl-block { padding: 20px; }
