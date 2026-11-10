@@ -15,7 +15,12 @@
   var EVENTS = {
     truckload_quote_submitted: 'Truckload quote submitted',
     ltl_quote_submitted: 'LTL quote submitted',
-    quote_submit_failed: 'Quote submit failed'
+    quote_submit_failed: 'Quote submit failed',
+    // Funnel and secondary-conversion events (2026-11-09): started = first keystroke in a
+    // quote form; phone_click = a tap on a tel: link (the other way people convert).
+    truckload_form_started: 'Truckload form started',
+    ltl_form_started: 'LTL form started',
+    phone_click: 'Phone number clicked'
   };
 
   // Only these keys are ever allowed to leave the page. No free text, no contact data.
@@ -43,6 +48,15 @@
       // Analytics must never break a quote submission.
     }
   };
+
+  // Any link marked data-track="phone_click" (or another whitelisted event name) reports
+  // the click. Only names in EVENTS are accepted, so markup cannot invent events.
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest ? e.target.closest('a[data-track]') : null;
+    if (!a) return;
+    var name = a.getAttribute('data-track');
+    if (EVENTS[name]) window.srlTrack(name, { form: document.getElementById('ltl-form') ? 'ltl' : 'truckload' });
+  });
 
   // Lead attribution (added 2026-11-03). Remembers how the visitor arrived so a
   // quote request can say "Google Ads, search campaign" instead of leaving us to

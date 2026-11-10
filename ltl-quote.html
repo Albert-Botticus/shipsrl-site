@@ -11,17 +11,17 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LTL Quote | SRL Logistics, an Armstrong Transport Group Agency</title>
-  <meta name="description" content="Request an LTL freight quote from SRL Logistics. Enter your pickup and delivery zips, ship date, accessorials, and pallet details and we will price it through Armstrong Transport Group's LTL carriers.">
+  <title>LTL Freight Quote From a Person, Usually Within the Hour | SRL Logistics</title>
+  <meta name="description" content="Get a real LTL freight rate, not a calculator estimate. Tell SRL Logistics the zips, ship date and pallets and a person prices it through Armstrong Transport Group's LTL carriers and emails you the quote, usually within the hour on business days.">
   <link rel="icon" type="image/png" href="img/favicon.png">
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=6">
-  <link rel="stylesheet" href="css/ltl.css?v=6">
+  <link rel="stylesheet" href="css/style.css?v=7">
+  <link rel="stylesheet" href="css/ltl.css?v=7">
 </head>
-<body>
+<body class="ltl-page">
 
 <header class="site-header">
   <div class="container">
@@ -38,101 +38,149 @@
       <a href="ltl-quote.html" aria-current="page">LTL quote</a>
       <a href="carriers.html">Carriers</a>
       <a href="index.html#contact">Contact</a>
-      <a class="btn primary" href="index.html#contact">Request a quote</a>
+      <a class="btn primary" href="tel:+13802357422" data-track="phone_click">Call us</a>
     </nav>
   </div>
 </header>
 
-<section class="page-hero">
+<section class="page-hero ltl-hero">
   <div class="container">
-    <span class="eyebrow">LTL quote request</span>
-    <h1>Get an LTL quote.</h1>
-    <p class="lead">Fill in the shipment the same way our carriers price it: ship date, zips, accessorials, and a line for each item. We price it through Armstrong Transport Group's LTL network and reply by email, usually within the hour on business days.</p>
+    <div>
+      <span class="eyebrow">LTL freight quote</span>
+      <h1>A real LTL rate from a real person, usually within the hour.</h1>
+      <p class="lead">Tell us where the freight is going and what it is. We price it through Armstrong Transport Group's LTL carrier network and email you the quote. No account, no login, no sales call unless you want one.</p>
+      <div class="btn-row">
+        <a class="btn primary" href="#ltl-form">Start my quote</a>
+        <a class="btn ghost" href="tel:+13802357422" data-track="phone_click">Or call 380-235-7422</a>
+      </div>
+      <p class="hero-foot">Takes about two minutes. Need a full truckload instead? <a href="index.html#quote-form">Use the truckload form</a>.</p>
+    </div>
+    <div class="hero-card">
+      <h3>What you get back</h3>
+      <ul>
+        <li>A carrier rate for your lane and ship date, not a calculator estimate</li>
+        <li>Liftgate, residential, appointment and limited access priced in up front</li>
+        <li>Freight class checked by us, so the invoice matches the quote</li>
+        <li>One contact, one invoice, tracking from pickup to delivery</li>
+      </ul>
+    </div>
   </div>
 </section>
 
-<section class="section">
+<div class="trust">
   <div class="container">
+    <span>Agency of Armstrong Transport Group, MC 555609</span>
+    <span>Moving freight since 2005</span>
+    <span>Every carrier vetted</span>
+    <span>Quotes answered by a person</span>
+  </div>
+</div>
+
+<section class="section ltl-section">
+  <div class="container">
+    <div class="ltl-layout">
+
     <form id="ltl-form" class="ltl-form" novalidate>
+      <ol class="steps-bar" aria-label="Three short steps">
+        <li><span>1</span> Where and when</li>
+        <li><span>2</span> What is shipping</li>
+        <li><span>3</span> Where to send the quote</li>
+      </ol>
 
       <div class="ltl-block">
-        <h2>Your contact details</h2>
+        <h2><span class="step-n">1</span> Where and when</h2>
+        <p class="hint">Type each zip and the city fills in on its own. Quotes are good for the ship date you pick, so choose the date the freight will actually be ready.</p>
+        <div class="row three">
+          <div><label for="origin-zip">Pickup zip *</label><input id="origin-zip" name="origin_zip" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="43081" autocomplete="postal-code" required><p class="zip-note" id="origin-zip-note" aria-live="polite"></p></div>
+          <div><label for="dest-zip">Delivery zip *</label><input id="dest-zip" name="destination_zip" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="28203" autocomplete="postal-code" required><p class="zip-note" id="dest-zip-note" aria-live="polite"></p></div>
+          <div><label for="ship-date">Ready to ship on *</label><input id="ship-date" name="ship_date" type="date" required></div>
+        </div>
         <div class="row">
-          <div><label for="c-name">Your name *</label><input id="c-name" name="contact_name" type="text" required></div>
-          <div><label for="c-company">Company *</label><input id="c-company" name="contact_company" type="text" required></div>
-        </div>
-        <div class="row three">
-          <div><label for="c-email">Email *</label><input id="c-email" name="contact_email" type="email" required></div>
-          <div><label for="c-phone">Phone</label><input id="c-phone" name="contact_phone" type="tel"></div>
-          <div><label for="c-website">Company website</label><input id="c-website" name="contact_website" type="text" inputmode="url" autocomplete="url" placeholder="Optional, example: yourcompany.com"></div>
-        </div>
-        <div class="sms-consent">
-            <label class="sms-consent-label"><input id="c-sms-consent" name="contact_sms_consent" type="checkbox" value="yes"> <span>I consent to receive conversational and informational SMS from SRL Logistics about my quotes and shipments. Reply STOP to opt-out; Reply HELP for support; Message &amp; data rates may apply; Messaging frequency may vary. <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and <a href="terms.html#sms" target="_blank" rel="noopener">SMS Terms of Service</a>.</span></label>
-        </div>
-      </div>
-
-      <div class="ltl-block">
-        <h2>Shipment</h2>
-        <p class="hint">Quotes are contingent on the actual ship date. Pick the date closest to when the freight will actually ship. Type each zip and the city fills in from it, so the two always agree.</p>
-        <div class="row three">
-          <div><label for="ship-date">Expected ship date *</label><input id="ship-date" name="ship_date" type="date" required></div>
-          <div><label for="origin-zip">Origin zip *</label><input id="origin-zip" name="origin_zip" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="43081" autocomplete="postal-code" required><p class="zip-note" id="origin-zip-note" aria-live="polite"></p></div>
-          <div><label for="dest-zip">Destination zip *</label><input id="dest-zip" name="destination_zip" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="28203" autocomplete="postal-code" required><p class="zip-note" id="dest-zip-note" aria-live="polite"></p></div>
-        </div>
-        <div class="row three">
-          <div><label for="origin-city">Origin city, state *</label>
-            <select id="origin-city" name="origin_city" data-zip="origin-zip" disabled><option value="">Enter the origin zip first</option></select>
+          <div><label for="origin-city">Pickup city, state *</label>
+            <select id="origin-city" name="origin_city" data-zip="origin-zip" disabled><option value="">Enter the pickup zip first</option></select>
           </div>
-          <div><label for="dest-city">Destination city, state *</label>
-            <select id="dest-city" name="destination_city" data-zip="dest-zip" disabled><option value="">Enter the destination zip first</option></select>
+          <div><label for="dest-city">Delivery city, state *</label>
+            <select id="dest-city" name="destination_city" data-zip="dest-zip" disabled><option value="">Enter the delivery zip first</option></select>
           </div>
-          <div><label for="declared">Declared value ($)</label><input id="declared" name="declared_value" type="number" min="0" step="1" placeholder="Optional"></div>
         </div>
+
+        <div class="quick-acc">
+          <div class="quick-acc-group">
+            <p class="quick-acc-title">Pickup location</p>
+            <div class="toggles">
+              <label><input type="checkbox" name="pickup_accessorial" value="Residential"> <span>Residential or home</span></label>
+              <label><input type="checkbox" name="pickup_accessorial" value="Liftgate"> <span>No dock, needs liftgate</span></label>
+              <label><input type="checkbox" name="pickup_accessorial" value="Appointment"> <span>Appointment required</span></label>
+              <label><input type="checkbox" name="pickup_accessorial" value="Limited Access"> <span>Limited access (school, farm, military, storage)</span></label>
+              <label><input type="checkbox" name="pickup_accessorial" value="Inside"> <span>Inside pickup</span></label>
+            </div>
+          </div>
+          <div class="quick-acc-group">
+            <p class="quick-acc-title">Delivery location</p>
+            <div class="toggles">
+              <label><input type="checkbox" name="delivery_accessorial" value="Residential"> <span>Residential or home</span></label>
+              <label><input type="checkbox" name="delivery_accessorial" value="Liftgate"> <span>No dock, needs liftgate</span></label>
+              <label><input type="checkbox" name="delivery_accessorial" value="Appointment"> <span>Appointment required</span></label>
+              <label><input type="checkbox" name="delivery_accessorial" value="Limited Access"> <span>Limited access (school, farm, military, storage)</span></label>
+              <label><input type="checkbox" name="delivery_accessorial" value="Inside"> <span>Inside delivery</span></label>
+            </div>
+          </div>
+        </div>
+        <details class="more">
+          <summary>More pickup and delivery options (airport, trade show, protect from freeze, sort and segregate)</summary>
+          <div class="row">
+            <fieldset class="chips">
+              <legend>Pickup</legend>
+              <label><input type="checkbox" name="pickup_accessorial" value="Airport"> Airport</label>
+              <label><input type="checkbox" name="pickup_accessorial" value="CFS"> CFS</label>
+              <label><input type="checkbox" name="pickup_accessorial" value="Protect From Freeze"> Protect from freeze</label>
+              <label><input type="checkbox" name="pickup_accessorial" value="Sort & Segregate"> Sort and segregate</label>
+              <label><input type="checkbox" name="pickup_accessorial" value="Trade Show"> Trade show</label>
+            </fieldset>
+            <fieldset class="chips">
+              <legend>Delivery</legend>
+              <label><input type="checkbox" name="delivery_accessorial" value="Airport"> Airport</label>
+              <label><input type="checkbox" name="delivery_accessorial" value="CFS"> CFS</label>
+              <label><input type="checkbox" name="delivery_accessorial" value="Notification"> Call before delivery</label>
+              <label><input type="checkbox" name="delivery_accessorial" value="Sort & Segregate"> Sort and segregate</label>
+              <label><input type="checkbox" name="delivery_accessorial" value="Trade Show"> Trade show</label>
+            </fieldset>
+          </div>
+        </details>
       </div>
 
       <div class="ltl-block">
-        <h2>Accessorials</h2>
-        <p class="hint">Check anything that applies. These change the rate, so it is better to tell us now than at pickup.</p>
-        <div class="row">
-          <fieldset class="chips">
-            <legend>Pickup</legend>
-            <label><input type="checkbox" name="pickup_accessorial" value="Airport"> Airport</label>
-            <label><input type="checkbox" name="pickup_accessorial" value="Appointment"> Appointment</label>
-            <label><input type="checkbox" name="pickup_accessorial" value="CFS"> CFS</label>
-            <label><input type="checkbox" name="pickup_accessorial" value="Inside"> Inside</label>
-            <label><input type="checkbox" name="pickup_accessorial" value="Liftgate"> Liftgate</label>
-            <label><input type="checkbox" name="pickup_accessorial" value="Limited Access"> Limited access</label>
-            <label><input type="checkbox" name="pickup_accessorial" value="Protect From Freeze"> Protect from freeze</label>
-            <label><input type="checkbox" name="pickup_accessorial" value="Residential"> Residential</label>
-            <label><input type="checkbox" name="pickup_accessorial" value="Sort & Segregate"> Sort and segregate</label>
-            <label><input type="checkbox" name="pickup_accessorial" value="Trade Show"> Trade show</label>
-          </fieldset>
-          <fieldset class="chips">
-            <legend>Delivery</legend>
-            <label><input type="checkbox" name="delivery_accessorial" value="Airport"> Airport</label>
-            <label><input type="checkbox" name="delivery_accessorial" value="Appointment"> Appointment</label>
-            <label><input type="checkbox" name="delivery_accessorial" value="CFS"> CFS</label>
-            <label><input type="checkbox" name="delivery_accessorial" value="Inside"> Inside</label>
-            <label><input type="checkbox" name="delivery_accessorial" value="Liftgate"> Liftgate</label>
-            <label><input type="checkbox" name="delivery_accessorial" value="Limited Access"> Limited access</label>
-            <label><input type="checkbox" name="delivery_accessorial" value="Notification"> Notification</label>
-            <label><input type="checkbox" name="delivery_accessorial" value="Residential"> Residential</label>
-            <label><input type="checkbox" name="delivery_accessorial" value="Sort & Segregate"> Sort and segregate</label>
-            <label><input type="checkbox" name="delivery_accessorial" value="Trade Show"> Trade show</label>
-          </fieldset>
+        <h2><span class="step-n">2</span> What is shipping</h2>
+        <p class="hint">One line per type of handling unit. Weight is the total for that line with the pallet included. Dimensions are optional, but with them we can quote the right class and the rate holds up at delivery.</p>
+        <div id="items"></div>
+        <button type="button" class="btn outline" id="add-item">Add another item</button>
+        <div class="totals-line">
+          <div class="totals" id="totals">Total weight: 0 lb</div>
+          <label class="inline-check"><input type="checkbox" name="stackable" value="yes"> Freight is stackable</label>
+          <label class="inline-check"><input type="checkbox" name="hazmat" value="yes" id="hazmat-toggle"> Contains hazardous materials</label>
         </div>
-      </div>
-
-      <div class="ltl-block">
-        <h2>Items picking up</h2>
-        <p class="hint">One line per handling unit type. Weight is the total for that line, pallet included. Measure each handling unit the way it will ship: length, width, and height with the pallet under it.</p>
-        <div class="notice" id="class-notice">
-          <strong>Not sure of your freight class? That is common, and it is fine.</strong>
-          <p>Leave the class on "Not sure" and give us accurate weight and dimensions. Freight class is set by the National Motor Freight Classification (NMFC), and for most goods it comes from density: pounds per cubic foot. As you type, each item shows its estimated density class, and we will do our best to quote the right class for you.</p>
-          <p>One thing to know up front: LTL carriers can reweigh and re-measure freight after pickup. If their numbers put it in a different class, they bill the corrected class, and that change shows up on the final invoice. Accurate dimensions and weight now are the best protection against a surprise later.</p>
-          <details>
-            <summary>How we estimate freight class from density</summary>
-            <p>Cubic feet = length x width x height in inches, divided by 1,728. Density = total weight divided by cubic feet. The density then falls into one of these bands on the NMFC density scale (in effect since July 2025):</p>
+        <div id="hazmat-fields" class="hazmat hidden">
+          <div class="row three">
+            <div><label for="hz-un">UN or NA number</label><input id="hz-un" name="hazmat_un" type="text" placeholder="UN1993"></div>
+            <div><label for="hz-class">Hazard class</label><input id="hz-class" name="hazmat_class" type="text" placeholder="3"></div>
+            <div><label for="hz-pg">Packing group</label>
+              <select id="hz-pg" name="hazmat_packing_group"><option value="">Select</option><option>I</option><option>II</option><option>III</option><option>None</option></select>
+            </div>
+          </div>
+          <div class="row">
+            <div><label for="hz-name">Proper shipping name</label><input id="hz-name" name="hazmat_shipping_name" type="text"></div>
+            <div><label for="hz-contact">24-hour emergency contact (name and phone)</label><input id="hz-contact" name="hazmat_emergency_contact" type="text"></div>
+          </div>
+        </div>
+        <div class="checkline ack hidden" id="class-ack">
+          <label><input type="checkbox" name="class_estimate_ack" value="yes" id="class-ack-box"> <span>I understand SRL will estimate the freight class for items marked "Not sure", and that the carrier may reweigh or reclass the freight after pickup, which can change the final bill. *</span></label>
+        </div>
+        <details class="more" id="class-notice">
+          <summary>Not sure of your freight class? That is common, and it is fine. Here is how we handle it.</summary>
+          <div class="notice">
+            <p>Leave the class on "Not sure" and give us accurate weight and dimensions. Freight class is set by the National Motor Freight Classification (NMFC), and for most goods it comes from density: pounds per cubic foot. As you type, each item shows its estimated density class, and we confirm it before quoting.</p>
+            <p>LTL carriers can reweigh and re-measure freight after pickup. If their numbers put it in a different class, they bill the corrected class on the final invoice. Accurate dimensions and weight now are the best protection against a surprise later.</p>
+            <p>Cubic feet = length x width x height in inches, divided by 1,728. Density = total weight divided by cubic feet. The density falls into one of these bands on the NMFC density scale (in effect since July 2025):</p>
             <table class="class-table">
               <thead><tr><th>Density (lb per cu ft)</th><th>Class</th></tr></thead>
               <tbody>
@@ -151,43 +199,35 @@
                 <tr><td>Under 1</td><td>400</td></tr>
               </tbody>
             </table>
-            <p>Lower density means a higher class and a higher rate, so loose, light, or oversized freight costs more per pound than dense freight. Some commodities carry a fixed NMFC class regardless of density because of handling, stowability, or liability, so the estimate is a starting point, not a guarantee. If you know your NMFC item number, enter it and we will use it.</p>
-          </details>
-        </div>
-        <div id="items"></div>
-        <button type="button" class="btn outline" id="add-item">Add another item</button>
-        <div class="row three" style="margin-top: 18px;">
-          <div><label for="linear-feet">Total linear feet (override)</label><input id="linear-feet" name="linear_feet" type="number" min="0" step="0.5" placeholder="Optional"></div>
-          <div class="checkline"><label><input type="checkbox" name="stackable" value="yes"> Freight is stackable</label></div>
-          <div class="totals" id="totals">Total weight: 0 lb</div>
-        </div>
-        <div class="checkline ack hidden" id="class-ack">
-          <label><input type="checkbox" name="class_estimate_ack" value="yes" id="class-ack-box"> <span>I understand that SRL will estimate the freight class for items marked "Not sure", that the carrier may reclassify or reweigh the freight after pickup, and that a reclass can change the final bill. *</span></label>
-        </div>
-      </div>
-
-      <div class="ltl-block">
-        <h2>Hazmat</h2>
-        <div class="checkline"><label><input type="checkbox" name="hazmat" value="yes" id="hazmat-toggle"> This shipment contains hazardous materials</label></div>
-        <div id="hazmat-fields" class="hazmat hidden">
+            <p>Lower density means a higher class and a higher rate, so loose, light or oversized freight costs more per pound than dense freight. Some commodities carry a fixed NMFC class regardless of density because of handling, stowability or liability, so the estimate is a starting point, not a guarantee. If you know your NMFC item number, enter it under the item and we will use it.</p>
+          </div>
+        </details>
+        <details class="more">
+          <summary>Declared value, linear feet override, dock hours and other notes</summary>
           <div class="row three">
-            <div><label for="hz-un">UN or NA number</label><input id="hz-un" name="hazmat_un" type="text" placeholder="UN1993"></div>
-            <div><label for="hz-class">Hazard class</label><input id="hz-class" name="hazmat_class" type="text" placeholder="3"></div>
-            <div><label for="hz-pg">Packing group</label>
-              <select id="hz-pg" name="hazmat_packing_group"><option value="">Select</option><option>I</option><option>II</option><option>III</option><option>None</option></select>
-            </div>
+            <div><label for="declared">Declared value ($)</label><input id="declared" name="declared_value" type="number" min="0" step="1" placeholder="Optional"></div>
+            <div><label for="linear-feet">Total linear feet (override)</label><input id="linear-feet" name="linear_feet" type="number" min="0" step="0.5" placeholder="Optional"></div>
           </div>
-          <div class="row">
-            <div><label for="hz-name">Proper shipping name</label><input id="hz-name" name="hazmat_shipping_name" type="text"></div>
-            <div><label for="hz-contact">24-hour emergency contact (name and phone)</label><input id="hz-contact" name="hazmat_emergency_contact" type="text"></div>
-          </div>
-        </div>
+          <label for="notes">Dock hours, reference numbers, special handling, or the rate you are trying to beat</label>
+          <textarea id="notes" name="notes"></textarea>
+        </details>
       </div>
 
       <div class="ltl-block">
-        <h2>Anything else</h2>
-        <label for="notes">Dock hours, reference numbers, special handling, or the rate you are trying to beat</label>
-        <textarea id="notes" name="notes"></textarea>
+        <h2><span class="step-n">3</span> Where to send the quote</h2>
+        <p class="hint">We email the quote to you and only use these details to get it to you. No mailing list, no sharing.</p>
+        <div class="row">
+          <div><label for="c-name">Your name *</label><input id="c-name" name="contact_name" type="text" autocomplete="name" required></div>
+          <div><label for="c-company">Company *</label><input id="c-company" name="contact_company" type="text" autocomplete="organization" required></div>
+        </div>
+        <div class="row three">
+          <div><label for="c-email">Email for the quote *</label><input id="c-email" name="contact_email" type="email" autocomplete="email" required></div>
+          <div><label for="c-phone">Phone (if we have a quick question)</label><input id="c-phone" name="contact_phone" type="tel" autocomplete="tel"></div>
+          <div><label for="c-website">Company website</label><input id="c-website" name="contact_website" type="text" inputmode="url" autocomplete="url" placeholder="Optional"></div>
+        </div>
+        <div class="sms-consent">
+            <label class="sms-consent-label"><input id="c-sms-consent" name="contact_sms_consent" type="checkbox" value="yes"> <span>I consent to receive conversational and informational SMS from SRL Logistics about my quotes and shipments. Reply STOP to opt-out; Reply HELP for support; Message &amp; data rates may apply; Messaging frequency may vary. <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and <a href="terms.html#sms" target="_blank" rel="noopener">SMS Terms of Service</a>.</span></label>
+        </div>
       </div>
 
       <div class="ltl-submit">
@@ -195,42 +235,71 @@
              submissions where _gotcha is filled (Formspree docs, "Honeypot spam filtering").
              Not read by buildRequest(), so the TMS payload is unchanged. -->
         <div class="hp" aria-hidden="true"><label for="hp-gotcha">Leave this field empty</label><input id="hp-gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off"></div>
-        <button class="btn primary" type="submit">Send LTL quote request</button>
-        <p class="note" id="ltl-status" role="status" aria-live="polite">We reply to the email you entered. Need it faster? Call 380-235-7422.</p>
+        <button class="btn primary" type="submit">Get my LTL quote</button>
+        <p class="note" id="ltl-status" role="status" aria-live="polite">A person reads this and replies by email, usually within the hour on business days. In a hurry? Call <a href="tel:+13802357422" data-track="phone_click">380-235-7422</a>.</p>
       </div>
 
       <template id="item-template">
         <div class="item">
           <div class="item-head"><strong>Item <span class="n">1</span></strong><button type="button" class="remove" aria-label="Remove item">Remove</button></div>
           <div class="row four">
-            <div><label>Number of units *</label><input name="item_units" type="number" min="1" step="1" value="1" required></div>
+            <div><label>How many *</label><input name="item_units" type="number" min="1" step="1" value="1" inputmode="numeric" required></div>
             <div><label>Unit type *</label>
               <select name="item_unit_type" required>
                 <option>Pallets</option><option>Skids</option><option>Boxes</option><option>Cartons</option><option>Cases</option><option>Crates</option><option>Drums</option><option>Pails</option><option>Totes</option><option>Bags</option><option>Bundles</option><option>Items</option><option>Parts</option><option>Pieces</option><option>Units</option>
               </select>
             </div>
-            <div><label>Pieces per unit</label><input name="item_pieces" type="number" min="0" step="1" placeholder="Optional"></div>
-            <div><label>Total weight (lb) *</label><input name="item_weight" type="number" min="1" step="1" required></div>
+            <div class="span2"><label>Total weight for this line (lb) *</label><input name="item_weight" type="number" min="1" step="1" inputmode="numeric" placeholder="Pallet included" required></div>
           </div>
           <div class="row four">
-            <div><label>Length (in)</label><input name="item_length" type="number" min="0" step="1" placeholder="48"></div>
-            <div><label>Width (in)</label><input name="item_width" type="number" min="0" step="1" placeholder="40"></div>
-            <div><label>Height (in)</label><input name="item_height" type="number" min="0" step="1" placeholder="48"></div>
-            <div><label>Freight class</label>
-              <select name="item_class">
-                <option value="">Not sure</option>
-                <option>50</option><option>55</option><option>60</option><option>65</option><option>70</option><option>77.5</option><option>85</option><option>92.5</option><option>100</option><option>110</option><option>125</option><option>150</option><option>175</option><option>200</option><option>250</option><option>300</option><option>400</option><option>500</option>
-              </select>
-              <p class="class-est" aria-live="polite"></p>
+            <div><label>Length (in)</label><input name="item_length" type="number" min="0" step="1" inputmode="numeric" placeholder="48"></div>
+            <div><label>Width (in)</label><input name="item_width" type="number" min="0" step="1" inputmode="numeric" placeholder="40"></div>
+            <div><label>Height (in)</label><input name="item_height" type="number" min="0" step="1" inputmode="numeric" placeholder="48"></div>
+            <div><label>What is it?</label><input name="item_description" type="text" placeholder="Example: boxed auto parts"></div>
+          </div>
+          <details class="item-more">
+            <summary>Know the freight class, NMFC number or piece count? Add it here (optional)</summary>
+            <div class="row three">
+              <div><label>Freight class</label>
+                <select name="item_class">
+                  <option value="">Not sure</option>
+                  <option>50</option><option>55</option><option>60</option><option>65</option><option>70</option><option>77.5</option><option>85</option><option>92.5</option><option>100</option><option>110</option><option>125</option><option>150</option><option>175</option><option>200</option><option>250</option><option>300</option><option>400</option><option>500</option>
+                </select>
+              </div>
+              <div><label>NMFC number</label><input name="item_nmfc" type="text" placeholder="Optional"></div>
+              <div><label>Pieces per unit</label><input name="item_pieces" type="number" min="0" step="1" inputmode="numeric" placeholder="Optional"></div>
             </div>
-          </div>
-          <div class="row">
-            <div><label>Item description</label><input name="item_description" type="text" placeholder="What is it? Example: palletized washers, boxed auto parts"></div>
-            <div><label>NMFC number</label><input name="item_nmfc" type="text" placeholder="Optional"></div>
-          </div>
+          </details>
+          <p class="class-est" aria-live="polite"></p>
         </div>
       </template>
     </form>
+
+    <aside class="ltl-aside">
+      <div class="aside-card">
+        <h3>Prefer to talk it through?</h3>
+        <p>Call <a href="tel:+13802357422" data-track="phone_click"><strong>380-235-7422</strong></a> or email <a href="mailto:SRLteam@armstrongtransport.com">SRLteam@armstrongtransport.com</a> with the zips, weight and pallet count. A person answers during business hours.</p>
+      </div>
+      <div class="aside-card">
+        <h3>What happens next</h3>
+        <ol class="next-steps">
+          <li><strong>We read it.</strong> A person at SRL checks the lane, class and accessorials.</li>
+          <li><strong>We price it.</strong> Your shipment is rated across Armstrong Transport Group's LTL carriers for your ship date.</li>
+          <li><strong>You get the quote by email.</strong> Usually within the hour on business days. Book it when you are ready, or not at all.</li>
+        </ol>
+      </div>
+      <div class="aside-card">
+        <h3>Why shippers send it to us</h3>
+        <ul class="aside-list">
+          <li>Real carrier rates, not a calculator guess that changes at pickup</li>
+          <li>Residential, liftgate and appointment deliveries handled every day</li>
+          <li>One or twenty pallets, same attention</li>
+          <li>Backed by Armstrong Transport Group's carrier network, contracts and credit</li>
+        </ul>
+      </div>
+    </aside>
+
+    </div>
   </div>
 </section>
 
@@ -255,7 +324,7 @@
     <div>
       <h4>Contact</h4>
       <ul>
-        <li><a href="tel:+13802357422">380-235-7422</a></li>
+        <li><a href="tel:+13802357422" data-track="phone_click">380-235-7422</a></li>
         <li><a href="mailto:SRLteam@armstrongtransport.com">SRLteam@armstrongtransport.com</a></li>
         <li><a href="https://www.facebook.com/profile.php?id=61565116164609" target="_blank" rel="noopener">Facebook</a></li>
         <li><a href="https://www.linkedin.com/in/nathan-levy-8b02a3b1/" target="_blank" rel="noopener">LinkedIn</a></li>
@@ -267,8 +336,14 @@
   </div>
 </footer>
 
-<script src="js/track.js"></script>
+<!-- Phone-width only: call or jump to the form without scrolling back up. -->
+<div class="mobile-bar" id="mobile-bar">
+  <a class="btn primary" href="tel:+13802357422" data-track="phone_click">Call 380-235-7422</a>
+  <a class="btn outline" href="#ltl-form">Start my quote</a>
+</div>
+
+<script src="js/track.js?v=2"></script>
 <script src="js/main.js?v=2"></script>
-<script src="js/ltl.js?v=3"></script>
+<script src="js/ltl.js?v=4"></script>
 </body>
 </html>

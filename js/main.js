@@ -19,6 +19,12 @@
   var form = document.getElementById('quote-form');
   if (form) {
     var sending = false;
+    var started = false;
+    form.addEventListener('input', function () {
+      if (started) return;
+      started = true;
+      if (window.srlTrack) window.srlTrack('truckload_form_started', { form: 'truckload' });
+    });
     form.addEventListener('submit', function (event) {
       event.preventDefault();
       var status = document.getElementById('form-status');

@@ -85,7 +85,9 @@
       if (!out) return;
       out.classList.remove('warn');
       if (r.freight_class === 'Not sure') {
-        anyUnknown = true;
+        // The acknowledgment only appears once there is a real item (a weight), so a blank
+        // form does not open with a warning box. Weight is required, so it is always shown by submit time.
+        if (r.weight_lb > 0) anyUnknown = true;
         if (r.estimated_class) out.textContent = 'Estimated from density: class ' + r.estimated_class + ' (' + r.pcf + ' lb/cu ft). We will confirm it.';
         else out.textContent = 'Enter weight and dimensions and we will estimate the class.';
       } else if (r.estimated_class && r.estimated_class !== r.freight_class && !r.nmfc) {
@@ -346,6 +348,15 @@
     return ok;
   }
 
+  // Funnel: fires once per page view the first time the visitor touches the form, so GA4
+  // can show how many people start versus finish (ltl_form_started vs ltl_quote_submitted).
+  var started = false;
+  form.addEventListener('input', function () {
+    if (started) return;
+    started = true;
+    if (window.srlTrack) window.srlTrack('ltl_form_started', { form: 'ltl' });
+  });
+
   var sending = false;
   form.addEventListener('submit', function (event) {
     event.preventDefault();
@@ -363,6 +374,9 @@
     }
     if (!validate()) {
       var bad = form.querySelector(':invalid');
+      // A required field inside a folded "optional" section must be shown before it is focused.
+      var fold = bad && bad.closest('details');
+      while (fold) { fold.open = true; fold = fold.parentElement && fold.parentElement.closest('details'); }
       status.textContent = bad === ackBox
         ? 'Please tick the freight class box so we know you understand the class may be corrected by the carrier.'
         : (bad && bad.validationMessage && /zip/i.test(bad.validationMessage)) ? bad.validationMessage
@@ -396,7 +410,7 @@
         if (!res.ok) throw new Error('http_' + res.status);
         // Success is only ever declared here, after Formspree accepts the POST.
         sending = false;
-        status.textContent = 'Sent. We will reply to ' + request.contact.email + ' with your quote.';
+        status.textContent = 'Sent. A person will reply to ' + request.contact.email + ' with your quote, usually within the hour on business days.';
         if (button) button.disabled = true;
         // Our own test submissions ("test, ignore" in the company name) must not count as Google
         // Ads conversions: they would teach the bidding that our tests are customers.
