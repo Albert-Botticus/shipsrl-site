@@ -305,7 +305,10 @@
     lines.push('Submitted: ' + r.submitted_at);
     lines.push('');
     lines.push('Contact name: ' + r.contact.name);
-    lines.push('Company: ' + r.contact.company);
+    // Company became optional 2026-11-13 (it was blocking small and one-off shippers).
+    // Everything downstream - the email subject, Albert's record slug, the "test, ignore"
+    // check - was written assuming it is always present, so never emit an empty value.
+    lines.push('Company: ' + (r.contact.company || '(not given - individual or small shipper)'));
     lines.push('Email: ' + r.contact.email);
     lines.push('Phone: ' + r.contact.phone);
     lines.push('Website: ' + (r.contact.website || '-'));
@@ -386,7 +389,8 @@
       return;
     }
     var request = buildRequest();
-    var subject = 'LTL Quote Request: ' + request.shipment.origin_zip + ' to ' + request.shipment.destination_zip + ' (' + request.contact.company + ')';
+    var who = request.contact.company || request.contact.name || 'individual shipper';
+    var subject = 'LTL Quote Request: ' + request.shipment.origin_zip + ' to ' + request.shipment.destination_zip + ' (' + who + ')';
     var text = toText(request);
 
     // Fallback only. It never claims the request was sent.

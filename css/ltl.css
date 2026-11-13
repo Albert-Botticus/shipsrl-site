@@ -123,3 +123,19 @@ details.more textarea { min-height: 90px; }
   body.ltl-page { padding-bottom: 76px; }
   .ltl-form input, .ltl-form select, .ltl-form textarea { font-size: 16px; }
 }
+
+/* Price anchor in the LTL hero (2026-11-13). Google Ads traffic arrives on informational
+   queries like "how much to ship an LTL pallet" and the page previously answered with a form
+   and no number. Giving a range up front earns the form fill instead of a bounce to compare. */
+.price-anchor {
+  max-width: 640px;
+  margin: 16px 0 0;
+  padding: 12px 14px;
+  border-left: 3px solid var(--accent, #4da3ff);
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+  color: #dbe5f1;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.price-anchor strong { color: var(--white, #fff); }

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css?v=7">
-  <link rel="stylesheet" href="css/ltl.css?v=7">
+  <link rel="stylesheet" href="css/ltl.css?v=8">
 </head>
 <body class="ltl-page">
 
@@ -49,6 +49,7 @@
       <span class="eyebrow">LTL freight quote</span>
       <h1>A real LTL rate from a real person, usually within the hour.</h1>
       <p class="lead">Tell us where the freight is going and what it is. We price it through Armstrong Transport Group's LTL carrier network and email you the quote. No account, no login, no sales call unless you want one.</p>
+      <p class="price-anchor"><strong>Roughly what it costs:</strong> one standard 48x40 pallet under 500 lb usually lands between <strong>$350 and $700</strong> dock to dock, depending on distance, freight class and whether either end needs a liftgate or is residential. Long cross-country lanes and heavier or bulkier pallets run above that. Your quote below is a real carrier rate for your lane, not an estimate off this range.</p>
       <div class="btn-row">
         <a class="btn primary" href="#ltl-form">Start my quote</a>
         <a class="btn ghost" href="tel:+13802357422" data-track="phone_click">Or call 380-235-7422</a>
@@ -89,11 +90,11 @@
 
       <div class="ltl-block">
         <h2><span class="step-n">1</span> Where and when</h2>
-        <p class="hint">Type each zip and the city fills in on its own. Quotes are good for the ship date you pick, so choose the date the freight will actually be ready.</p>
+        <p class="hint">Type each zip and the city fills in on its own. The ship date is already set to the next business day, so change it only if you know the freight moves on a different day. Not sure yet? Leave it and say so when we email the quote.</p>
         <div class="row three">
           <div><label for="origin-zip">Pickup zip *</label><input id="origin-zip" name="origin_zip" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="43081" autocomplete="postal-code" required><p class="zip-note" id="origin-zip-note" aria-live="polite"></p></div>
           <div><label for="dest-zip">Delivery zip *</label><input id="dest-zip" name="destination_zip" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="28203" autocomplete="postal-code" required><p class="zip-note" id="dest-zip-note" aria-live="polite"></p></div>
-          <div><label for="ship-date">Ready to ship on *</label><input id="ship-date" name="ship_date" type="date" required></div>
+          <div><label for="ship-date">Ready to ship on</label><input id="ship-date" name="ship_date" type="date" required><p class="zip-note">Prefilled, change if you know it</p></div>
         </div>
         <div class="row">
           <div><label for="origin-city">Pickup city, state *</label>
@@ -110,9 +111,6 @@
             <div class="toggles">
               <label><input type="checkbox" name="pickup_accessorial" value="Residential"> <span>Residential or home</span></label>
               <label><input type="checkbox" name="pickup_accessorial" value="Liftgate"> <span>No dock, needs liftgate</span></label>
-              <label><input type="checkbox" name="pickup_accessorial" value="Appointment"> <span>Appointment required</span></label>
-              <label><input type="checkbox" name="pickup_accessorial" value="Limited Access"> <span>Limited access (school, farm, military, storage)</span></label>
-              <label><input type="checkbox" name="pickup_accessorial" value="Inside"> <span>Inside pickup</span></label>
             </div>
           </div>
           <div class="quick-acc-group">
@@ -120,17 +118,17 @@
             <div class="toggles">
               <label><input type="checkbox" name="delivery_accessorial" value="Residential"> <span>Residential or home</span></label>
               <label><input type="checkbox" name="delivery_accessorial" value="Liftgate"> <span>No dock, needs liftgate</span></label>
-              <label><input type="checkbox" name="delivery_accessorial" value="Appointment"> <span>Appointment required</span></label>
-              <label><input type="checkbox" name="delivery_accessorial" value="Limited Access"> <span>Limited access (school, farm, military, storage)</span></label>
-              <label><input type="checkbox" name="delivery_accessorial" value="Inside"> <span>Inside delivery</span></label>
             </div>
           </div>
         </div>
         <details class="more">
-          <summary>More pickup and delivery options (airport, trade show, protect from freeze, sort and segregate)</summary>
+          <summary>Anything else about the pickup or delivery? (appointment, limited access, inside, airport, trade show, protect from freeze, sort and segregate)</summary>
           <div class="row">
             <fieldset class="chips">
               <legend>Pickup</legend>
+              <label><input type="checkbox" name="pickup_accessorial" value="Appointment"> Appointment required</label>
+              <label><input type="checkbox" name="pickup_accessorial" value="Limited Access"> Limited access (school, farm, military, storage)</label>
+              <label><input type="checkbox" name="pickup_accessorial" value="Inside"> Inside pickup</label>
               <label><input type="checkbox" name="pickup_accessorial" value="Airport"> Airport</label>
               <label><input type="checkbox" name="pickup_accessorial" value="CFS"> CFS</label>
               <label><input type="checkbox" name="pickup_accessorial" value="Protect From Freeze"> Protect from freeze</label>
@@ -139,6 +137,9 @@
             </fieldset>
             <fieldset class="chips">
               <legend>Delivery</legend>
+              <label><input type="checkbox" name="delivery_accessorial" value="Appointment"> Appointment required</label>
+              <label><input type="checkbox" name="delivery_accessorial" value="Limited Access"> Limited access (school, farm, military, storage)</label>
+              <label><input type="checkbox" name="delivery_accessorial" value="Inside"> Inside delivery</label>
               <label><input type="checkbox" name="delivery_accessorial" value="Airport"> Airport</label>
               <label><input type="checkbox" name="delivery_accessorial" value="CFS"> CFS</label>
               <label><input type="checkbox" name="delivery_accessorial" value="Notification"> Call before delivery</label>
@@ -218,7 +219,7 @@
         <p class="hint">We email the quote to you and only use these details to get it to you. No mailing list, no sharing.</p>
         <div class="row">
           <div><label for="c-name">Your name *</label><input id="c-name" name="contact_name" type="text" autocomplete="name" required></div>
-          <div><label for="c-company">Company *</label><input id="c-company" name="contact_company" type="text" autocomplete="organization" required></div>
+          <div><label for="c-company">Company</label><input id="c-company" name="contact_company" type="text" autocomplete="organization" placeholder="Optional"></div>
         </div>
         <div class="row three">
           <div><label for="c-email">Email for the quote *</label><input id="c-email" name="contact_email" type="email" autocomplete="email" required></div>
@@ -344,6 +345,6 @@
 
 <script src="js/track.js?v=2"></script>
 <script src="js/main.js?v=2"></script>
-<script src="js/ltl.js?v=4"></script>
+<script src="js/ltl.js?v=5"></script>
 </body>
 </html>
