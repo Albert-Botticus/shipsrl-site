@@ -139,3 +139,18 @@ details.more textarea { min-height: 90px; }
   line-height: 1.5;
 }
 .price-anchor strong { color: var(--white, #fff); }
+
+/* Form-first layout (2026-11-16, Nathan: "the quote field should be the first or second thing
+   they see"). The hero is one short block and the form starts right under it; the price range,
+   "what you get back" and the trust bar moved to the aside and below the form. */
+.ltl-hero-compact { padding: 28px 0 24px; }
+.ltl-hero-compact .container { display: block; }
+.ltl-hero-compact h1 { font-size: clamp(1.5rem, 2.8vw, 2.1rem); margin: 6px 0 8px; }
+.ltl-hero-compact .lead { max-width: 900px; margin: 0; font-size: 1.02rem; }
+.ltl-hero-compact .lead strong, .ltl-hero-compact .lead a { color: var(--white, #fff); }
+.ltl-hero-compact + .ltl-section { padding-top: 24px; }
+.aside-card p strong { color: var(--navy); }
+@media (max-width: 720px) {
+  .ltl-hero-compact { padding: 18px 0 16px; }
+  .ltl-hero-compact .lead { font-size: 0.95rem; }
+}
