@@ -20,7 +20,12 @@
     // quote form; phone_click = a tap on a tel: link (the other way people convert).
     truckload_form_started: 'Truckload form started',
     ltl_form_started: 'LTL form started',
-    phone_click: 'Phone number clicked'
+    phone_click: 'Phone number clicked',
+    // Ad-click quality (2026-11-22): did a visitor who arrived from an ad behave like a person?
+    ad_visit: 'Ad visit',
+    ad_visit_interacted: 'Ad visit interacted',
+    ad_visit_10s: 'Ad visit stayed 10 seconds',
+    ad_visit_flagged: 'Ad visit flagged as automated'
   };
 
   // Only these keys are ever allowed to leave the page. No free text, no contact data.
@@ -138,6 +143,51 @@
 
   var current = null;
   try { current = capture(); } catch (err) { current = null; }
+
+  // Ad-click quality check (added 2026-11-22). Runs only on a page load that carries an ad
+  // click id in its address. Reports four coarse facts and nothing about the person:
+  // the visit happened, whether a real scroll/touch/key/mouse action followed, whether the
+  // page stayed open and visible for 10 seconds, and whether the browser announces itself
+  // as automated or sits in a time zone the ads do not serve.
+  (function adVisitQuality() {
+    var here = null;
+    try { here = fromUrl(); } catch (err) { here = null; }
+    if (!here || !(here.gclid || here.gbraid || here.wbraid || here.fbclid || here.msclkid)) return;
+    var form = document.getElementById('ltl-form') ? 'ltl' : 'truckload';
+    function send(name, reason) { var p = { form: form }; if (reason) p.reason = reason; window.srlTrack(name, p); }
+    send('ad_visit');
+
+    var reason = '';
+    try {
+      var nav = window.navigator || {};
+      var tz = '';
+      try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (err) { tz = ''; }
+      if (nav.webdriver) reason = 'webdriver';
+      else if (/HeadlessChrome|PhantomJS|python|curl|bot|spider|crawl/i.test(nav.userAgent || '')) reason = 'automation_agent';
+      else if (!nav.languages || !nav.languages.length) reason = 'no_language';
+      else if (!window.screen || !window.screen.width || !window.screen.height) reason = 'no_screen';
+      else if (tz && !/^(America|US|Pacific\/Honolulu)/.test(tz)) reason = 'tz_outside_us';
+    } catch (err) { reason = ''; }
+    if (reason) send('ad_visit_flagged', reason);
+
+    var interacted = false;
+    function onAct(e) {
+      if (interacted || (e && e.isTrusted === false)) return;
+      interacted = true;
+      send('ad_visit_interacted');
+      for (var i = 0; i < ACTS.length; i++) window.removeEventListener(ACTS[i], onAct, true);
+    }
+    var ACTS = ['scroll', 'pointerdown', 'touchstart', 'keydown', 'mousemove'];
+    for (var i = 0; i < ACTS.length; i++) window.addEventListener(ACTS[i], onAct, { capture: true, passive: true });
+
+    var visibleMs = 0, last = Date.now(), stayed = false;
+    var timer = window.setInterval(function () {
+      var now = Date.now();
+      if (document.visibilityState !== 'hidden') visibleMs += now - last;
+      last = now;
+      if (!stayed && visibleMs >= 10000) { stayed = true; send('ad_visit_10s'); window.clearInterval(timer); }
+    }, 1000);
+  })();
 
   // Returns a small object for the quote forms to include with the request.
   window.srlAttribution = function () {
